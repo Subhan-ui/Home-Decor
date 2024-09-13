@@ -40,20 +40,10 @@ export class UserGroupBy {
   })
   password!: string;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
-  })
-  address!: string;
-
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: false
   })
   isEmailVerified!: boolean;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: false
-  })
-  createdAt!: Date;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -69,6 +59,21 @@ export class UserGroupBy {
     nullable: true
   })
   resetTokenExpiry!: Date | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  profilePicture!: string | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  createdAt!: Date;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  updatedAt!: Date;
 
   @TypeGraphQL.Field(_type => UserCountAggregate, {
     nullable: true

@@ -35,20 +35,10 @@ export class CreateManyAndReturnUser {
   })
   password!: string;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
-  })
-  address!: string;
-
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: false
   })
   isEmailVerified!: boolean;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: false
-  })
-  createdAt!: Date;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -64,4 +54,19 @@ export class CreateManyAndReturnUser {
     nullable: true
   })
   resetTokenExpiry!: Date | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  profilePicture!: string | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  createdAt!: Date;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  updatedAt!: Date;
 }

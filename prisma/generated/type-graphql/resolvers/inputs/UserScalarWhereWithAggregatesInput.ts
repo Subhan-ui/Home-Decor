@@ -56,20 +56,10 @@ export class UserScalarWhereWithAggregatesInput {
   })
   password?: StringWithAggregatesFilter | undefined;
 
-  @TypeGraphQL.Field(_type => StringWithAggregatesFilter, {
-    nullable: true
-  })
-  address?: StringWithAggregatesFilter | undefined;
-
   @TypeGraphQL.Field(_type => BoolWithAggregatesFilter, {
     nullable: true
   })
   isEmailVerified?: BoolWithAggregatesFilter | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
-    nullable: true
-  })
-  createdAt?: DateTimeWithAggregatesFilter | undefined;
 
   @TypeGraphQL.Field(_type => StringNullableWithAggregatesFilter, {
     nullable: true
@@ -85,4 +75,19 @@ export class UserScalarWhereWithAggregatesInput {
     nullable: true
   })
   resetTokenExpiry?: DateTimeNullableWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => StringNullableWithAggregatesFilter, {
+    nullable: true
+  })
+  profilePicture?: StringNullableWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
+    nullable: true
+  })
+  createdAt?: DateTimeWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
+    nullable: true
+  })
+  updatedAt?: DateTimeWithAggregatesFilter | undefined;
 }

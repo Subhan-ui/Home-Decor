@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,16 +13,136 @@ generator typegraphql {
 }
 
 model User {
-  id               String    @id @unique @default(cuid())
+  id               String      @id @unique @default(cuid())
   name             String
-  email            String    @unique
-  mobileNumber     BigInt    @unique
+  email            String      @unique
+  mobileNumber     BigInt      @unique
   dateOfBirth      DateTime
   password         String
-  address          String
-  isEmailVerified  Boolean   @default(false)
-  createdAt        DateTime  @default(now())
+  isEmailVerified  Boolean     @default(false)
   verificationCode String?
   resetToken       String?
   resetTokenExpiry DateTime?
+  profilePicture   String?
+  address          Address?
+  orders           Order[]
+  cartItems        CartItem[]
+  favourites       Favourite[]
+  reviews          Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Address {
+  id         String @id @default(cuid())
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String @unique
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+
+  createdAt DateTime @default(now())
+}
+
+model FurnitureItem {
+  id            String      @id @default(cuid())
+  name          String
+  description   String
+  price         Float
+  picture       String?
+  category      Category    @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+  subCategoryId String
+  reviews       Review[]
+  favourites    Favourite[]
+  cartItems     CartItem[]
+  furnitureItem OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Category {
+  id             String          @id @default(cuid())
+  name           String
+  subCategories  SubCategory[]
+  furnitureItems FurnitureItem[]
+}
+
+model SubCategory {
+  id             String          @id @default(cuid())
+  name           String
+  category       Category        @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  furnitureItems FurnitureItem[]
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  totalPrice Float
+  status     OrderStatus @default(PENDING)
+  items      OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model OrderItem {
+  id              String        @id @default(cuid())
+  order           Order         @relation(fields: [orderId], references: [id])
+  orderId         String
+  furnitureItem   FurnitureItem @relation(fields: [furnitureItemId], references: [id])
+  furnitureItemId String
+  quantity        Int
+  price           Float
+
+  createdAt DateTime @default(now())
+}
+
+model CartItem {
+  id              String        @id @default(cuid())
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  furnitureItem   FurnitureItem @relation(fields: [furnitureItemId], references: [id], onDelete: Cascade)
+  furnitureItemId String
+  quantity        Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Favourite {
+  id              String        @id @default(cuid())
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  furnitureItem   FurnitureItem @relation(fields: [furnitureItemId], references: [id], onDelete: Cascade)
+  furnitureItemId String
+
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id              String        @id @default(cuid())
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  furnitureItem   FurnitureItem @relation(fields: [furnitureItemId], references: [id], onDelete: Cascade)
+  furnitureItemId String
+  rating          Int
+  comment         String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  DELIVERED
+  CANCELED
 }

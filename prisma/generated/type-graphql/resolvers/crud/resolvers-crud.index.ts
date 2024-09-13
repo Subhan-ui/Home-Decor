@@ -1,1 +1,10 @@
+export { AddressCrudResolver } from "./Address/AddressCrudResolver";
+export { CartItemCrudResolver } from "./CartItem/CartItemCrudResolver";
+export { CategoryCrudResolver } from "./Category/CategoryCrudResolver";
+export { FavouriteCrudResolver } from "./Favourite/FavouriteCrudResolver";
+export { FurnitureItemCrudResolver } from "./FurnitureItem/FurnitureItemCrudResolver";
+export { OrderCrudResolver } from "./Order/OrderCrudResolver";
+export { OrderItemCrudResolver } from "./OrderItem/OrderItemCrudResolver";
+export { ReviewCrudResolver } from "./Review/ReviewCrudResolver";
+export { SubCategoryCrudResolver } from "./SubCategory/SubCategoryCrudResolver";
 export { UserCrudResolver } from "./User/UserCrudResolver";

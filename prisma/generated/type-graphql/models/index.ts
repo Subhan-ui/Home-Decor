@@ -1,1 +1,10 @@
+export { Address } from "./Address";
+export { CartItem } from "./CartItem";
+export { Category } from "./Category";
+export { Favourite } from "./Favourite";
+export { FurnitureItem } from "./FurnitureItem";
+export { Order } from "./Order";
+export { OrderItem } from "./OrderItem";
+export { Review } from "./Review";
+export { SubCategory } from "./SubCategory";
 export { User } from "./User";

@@ -35,20 +35,10 @@ export class UserCreateManyInput {
   })
   password!: string;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
-  })
-  address!: string;
-
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true
   })
   isEmailVerified?: boolean | undefined;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true
-  })
-  createdAt?: Date | undefined;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -64,4 +54,19 @@ export class UserCreateManyInput {
     nullable: true
   })
   resetTokenExpiry?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  profilePicture?: string | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updatedAt?: Date | undefined;
 }

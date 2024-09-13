@@ -35,20 +35,10 @@ export class UserMinAggregate {
   })
   password!: string | null;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: true
-  })
-  address!: string | null;
-
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true
   })
   isEmailVerified!: boolean | null;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true
-  })
-  createdAt!: Date | null;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -64,4 +54,19 @@ export class UserMinAggregate {
     nullable: true
   })
   resetTokenExpiry!: Date | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  profilePicture!: string | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  createdAt!: Date | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updatedAt!: Date | null;
 }

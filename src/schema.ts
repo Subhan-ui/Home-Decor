@@ -1,9 +1,9 @@
 import { buildSchema } from "type-graphql";
-import { AuthResolver as resolvers } from "./resolvers";
+import resolvers  from "./resolvers";
 
 export const createSchema = async () => {
   return await buildSchema({
-    resolvers: [resolvers],
+    resolvers: resolvers,
     validate: false,
   });
 };

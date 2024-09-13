@@ -20,7 +20,7 @@ export class GroupByUserArgs {
   @TypeGraphQL.Field(_type => [UserScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "name" | "email" | "mobileNumber" | "dateOfBirth" | "password" | "address" | "isEmailVerified" | "createdAt" | "verificationCode" | "resetToken" | "resetTokenExpiry">;
+  by!: Array<"id" | "name" | "email" | "mobileNumber" | "dateOfBirth" | "password" | "isEmailVerified" | "verificationCode" | "resetToken" | "resetTokenExpiry" | "profilePicture" | "createdAt" | "updatedAt">;
 
   @TypeGraphQL.Field(_type => UserScalarWhereWithAggregatesInput, {
     nullable: true

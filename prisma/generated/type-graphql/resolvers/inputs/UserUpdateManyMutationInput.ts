@@ -41,20 +41,10 @@ export class UserUpdateManyMutationInput {
   })
   password?: StringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  address?: StringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
     nullable: true
   })
   isEmailVerified?: BoolFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
     nullable: true
@@ -70,4 +60,19 @@ export class UserUpdateManyMutationInput {
     nullable: true
   })
   resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  profilePicture?: NullableStringFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
 }

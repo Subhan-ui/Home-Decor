@@ -1,119 +1,124 @@
-import { sendVerificationEmail } from "../../lib/nodemail";
-import { Context, SignUpArgs } from "../../types/types";
-import bcrypt from "bcryptjs";
-import { v4 as uuid } from "uuid";
-import { addHours } from "date-fns";
+import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
+import { User } from "../../../prisma/generated/type-graphql/models";
+import { AuthResponse, AuthResponses, Context } from "../../types/types";
+import { Users } from "../User";
+import { auth } from "../../services/auth.services";
+import path from "path";
+import cloudinary from "../../lib/cloudinary";
 
-export const auth = {
+@Resolver()
+export class AuthResolver {
+  @Query(() => [User])
+  async getUsers(@Ctx() ctx: Context, args: User) {
+    return Users.getUsers(args, ctx);
+  }
+  @Query(() => User)
+  async getUser(@Arg("email") email: string, @Ctx() ctx: Context) {
+    return Users.getUser({ email }, ctx);
+  }
+  @Mutation(() => AuthResponses)
   async signUp(
-    { password, dateOfBirth, email, name, mobileNumber, address }: SignUpArgs,
-    context: Context
-  ) {
+    @Arg("name") name: string,
+    @Arg("email") email: string,
+    @Arg("password") password: string,
+    @Arg("mobileNumber") mobileNumber: number,
+    @Arg("dateOfBirth") dateOfBirth: String,
+    @Ctx() ctx: Context
+  ): Promise<AuthResponse | string> {
     try {
-      const existingUser = await context.prisma.user.findUnique({
-        where: { email },
-      });
-      if (existingUser) {
-        console.log("Email already in use");
-        throw new Error("Email already in use");
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const verificationCode = Math.floor(
-        100000 + Math.random() * 900000
-      ).toString();
-      console.log("verification code sent:", verificationCode);
-      await sendVerificationEmail(email, verificationCode);
-      const user = await context.prisma.user.create({
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-          mobileNumber,
-          dateOfBirth,
-          address,
-          isEmailVerified: false,
-          verificationCode,
-        },
-      });
-
-      return { user };
+      return await auth.signUp(
+        { name, email, password, mobileNumber, dateOfBirth },
+        ctx
+      );
     } catch (error) {
-      console.error("Error signing up:", error);
-      throw error;
+      console.error("Error in signUp resolver:", error);
+      throw new Error("Signup failed");
     }
-  },
-  async login(
-    { email, password }: { email: string; password: string },
-    context: Context
-  ) {
-    const user = await context.prisma.user.findUnique({
-      where: { email },
-    });
-    if (!user) {
-      return "User not found";
-    }
-    if (!user.isEmailVerified) {
-      return "Email not verified";
-    }
-    const passwordValid = await bcrypt.compare(password, user.password);
-    if (!passwordValid) {
-      return "Invalid Password";
-    }
-    return { user };
-  },
-  async forgotPassword({ email }: { email: string }, context: Context) {
-    const user = await context.prisma.user.findFirst({
-      where: { email },
-    });
-    if (!user) {
-      return "Email not registered.";
-    }
-    if (!user.isEmailVerified) {
-      return "Email not verified.";
-    }
-    const resetToken = uuid();
-    const resetTokenExpiry = addHours(new Date(), 1);
-    await context.prisma.user.update({
-      where: { email },
-      data: {
-        resetToken,
-        resetTokenExpiry,
-      },
-    });
-    await sendVerificationEmail(email, resetToken);
-    return "Password Reset Email Send Successfully";
-  },
-  async resetPassword(
-    { resetToken, newPassword }: { resetToken: string; newPassword: string },
-    context: Context
-  ) {
-    const user = await context.prisma.user.findFirst({
-      where: {
-        resetToken,
-        resetTokenExpiry: {
-          gte: new Date(),
-        },
-      },
-    });
+  }
 
-    if (!user) {
-      return "Invalid Or Expired Token";
+  @Mutation(() => Boolean)
+  async verifyEmail(
+    @Arg("email") email: string,
+    @Arg("verificationCode") verificationCode: string,
+    @Ctx() ctx: Context
+  ) {
+    const user = await ctx.prisma.user.findUnique({
+      where: { email: email },
+    });
+    if (!user || user.verificationCode !== verificationCode) {
+      throw new Error("Invalid Email or Verification Code");
     }
-    const isSame = await bcrypt.compare(newPassword, user.password);
-    if (isSame) {
-      return "You typed the same password again.";
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await context.prisma.user.update({
-      where: { id: user.id },
+    await ctx.prisma.user.update({
+      where: { email: email },
       data: {
-        password: hashedPassword,
-        resetToken: null,
-        resetTokenExpiry: null,
+        isEmailVerified: true,
+        verificationCode: null,
       },
     });
-    return "Password Reset Successfully";
-  },
-};
+    return true;
+  }
+  @Mutation(() => String)
+  async DeleteUser(@Arg("email") email: string, @Ctx() ctx: Context) {
+    const user = await ctx.prisma.user.findUnique({ where: { email: email } });
+    if (!user) {
+      return "User Not Found";
+    }
+    await ctx.prisma.user.delete({ where: { email: email } });
+    return "User Deleted Successfully";
+  }
+
+  @Mutation(() => AuthResponse)
+  async login(
+    @Arg("email") email: string,
+    @Arg("password") password: string,
+    @Ctx() ctx: Context
+  ): Promise<AuthResponse | string> {
+    return await auth.login({ email, password }, ctx);
+  }
+  @Mutation(() => String)
+  async forgotPassword(@Arg("email") email: string, @Ctx() ctx: Context) {
+    return await auth.forgotPassword({ email }, ctx);
+  }
+
+  @Mutation(() => String)
+  async resetPassword(
+    @Arg("resetToken") resetToken: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() ctx: Context
+  ) {
+    return await auth.resetPassword({ resetToken, newPassword }, ctx);
+  }
+
+  @Mutation(() => String)
+  async uploadImage(
+    @Arg("picture") picture: String,
+    @Arg("email") email: string,
+    @Ctx() { prisma }: Context
+  ) {
+    const mainDir = path.dirname(require.main?.filename || "");
+    picture = `${mainDir}/uploads/${picture}`;
+    try {
+      const photo = await cloudinary.v2.uploader.upload(picture);
+      console.log("image upload");
+      await prisma.user.update({
+        where: { email: email },
+        data: {
+          profilePicture: photo.secure_url,
+        },
+      });
+      return `${photo.public_id}.${photo.format}`;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Mutation(() => String)
+  async updateUser(
+    @Arg("picture") picture: string,
+    @Arg("email") email: string,
+    @Arg("name") name: string,
+    @Ctx() ctx: Context
+  ) {
+    return await auth.updateUser({ picture, email, name }, ctx);
+  }
+}

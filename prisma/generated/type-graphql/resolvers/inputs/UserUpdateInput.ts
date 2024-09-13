@@ -2,11 +2,16 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { AddressUpdateOneWithoutUserNestedInput } from "../inputs/AddressUpdateOneWithoutUserNestedInput";
 import { BigIntFieldUpdateOperationsInput } from "../inputs/BigIntFieldUpdateOperationsInput";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
+import { CartItemUpdateManyWithoutUserNestedInput } from "../inputs/CartItemUpdateManyWithoutUserNestedInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
+import { FavouriteUpdateManyWithoutUserNestedInput } from "../inputs/FavouriteUpdateManyWithoutUserNestedInput";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
+import { OrderUpdateManyWithoutUserNestedInput } from "../inputs/OrderUpdateManyWithoutUserNestedInput";
+import { ReviewUpdateManyWithoutUserNestedInput } from "../inputs/ReviewUpdateManyWithoutUserNestedInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
 
 @TypeGraphQL.InputType("UserUpdateInput", {})
@@ -41,20 +46,10 @@ export class UserUpdateInput {
   })
   password?: StringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  address?: StringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
     nullable: true
   })
   isEmailVerified?: BoolFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
     nullable: true
@@ -70,4 +65,44 @@ export class UserUpdateInput {
     nullable: true
   })
   resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  profilePicture?: NullableStringFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => AddressUpdateOneWithoutUserNestedInput, {
+    nullable: true
+  })
+  address?: AddressUpdateOneWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => OrderUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  orders?: OrderUpdateManyWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => CartItemUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  cartItems?: CartItemUpdateManyWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => FavouriteUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  favourites?: FavouriteUpdateManyWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => ReviewUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  reviews?: ReviewUpdateManyWithoutUserNestedInput | undefined;
 }

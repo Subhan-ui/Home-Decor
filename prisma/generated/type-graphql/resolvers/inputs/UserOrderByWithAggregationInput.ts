@@ -45,17 +45,7 @@ export class UserOrderByWithAggregationInput {
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
   })
-  address?: "asc" | "desc" | undefined;
-
-  @TypeGraphQL.Field(_type => SortOrder, {
-    nullable: true
-  })
   isEmailVerified?: "asc" | "desc" | undefined;
-
-  @TypeGraphQL.Field(_type => SortOrder, {
-    nullable: true
-  })
-  createdAt?: "asc" | "desc" | undefined;
 
   @TypeGraphQL.Field(_type => SortOrderInput, {
     nullable: true
@@ -71,6 +61,21 @@ export class UserOrderByWithAggregationInput {
     nullable: true
   })
   resetTokenExpiry?: SortOrderInput | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrderInput, {
+    nullable: true
+  })
+  profilePicture?: SortOrderInput | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  createdAt?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  updatedAt?: "asc" | "desc" | undefined;
 
   @TypeGraphQL.Field(_type => UserCountOrderByAggregateInput, {
     nullable: true
