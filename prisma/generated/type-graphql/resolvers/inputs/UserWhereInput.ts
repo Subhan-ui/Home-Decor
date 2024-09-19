@@ -3,12 +3,13 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AddressNullableRelationFilter } from "../inputs/AddressNullableRelationFilter";
-import { BigIntFilter } from "../inputs/BigIntFilter";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { CartItemListRelationFilter } from "../inputs/CartItemListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
+import { EnumRoleFilter } from "../inputs/EnumRoleFilter";
 import { FavouriteListRelationFilter } from "../inputs/FavouriteListRelationFilter";
+import { FurnitureItemListRelationFilter } from "../inputs/FurnitureItemListRelationFilter";
 import { OrderListRelationFilter } from "../inputs/OrderListRelationFilter";
 import { ReviewListRelationFilter } from "../inputs/ReviewListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
@@ -46,10 +47,10 @@ export class UserWhereInput {
   })
   email?: StringFilter | undefined;
 
-  @TypeGraphQL.Field(_type => BigIntFilter, {
+  @TypeGraphQL.Field(_type => StringFilter, {
     nullable: true
   })
-  mobileNumber?: BigIntFilter | undefined;
+  mobileNumber?: StringFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeFilter, {
     nullable: true
@@ -70,6 +71,11 @@ export class UserWhereInput {
     nullable: true
   })
   verificationCode?: StringNullableFilter | undefined;
+
+  @TypeGraphQL.Field(_type => EnumRoleFilter, {
+    nullable: true
+  })
+  role?: EnumRoleFilter | undefined;
 
   @TypeGraphQL.Field(_type => StringNullableFilter, {
     nullable: true
@@ -100,6 +106,11 @@ export class UserWhereInput {
     nullable: true
   })
   address?: AddressNullableRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => FurnitureItemListRelationFilter, {
+    nullable: true
+  })
+  furnitureItem?: FurnitureItemListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => OrderListRelationFilter, {
     nullable: true

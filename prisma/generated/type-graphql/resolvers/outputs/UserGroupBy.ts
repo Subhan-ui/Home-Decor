@@ -2,11 +2,10 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { UserAvgAggregate } from "../outputs/UserAvgAggregate";
 import { UserCountAggregate } from "../outputs/UserCountAggregate";
 import { UserMaxAggregate } from "../outputs/UserMaxAggregate";
 import { UserMinAggregate } from "../outputs/UserMinAggregate";
-import { UserSumAggregate } from "../outputs/UserSumAggregate";
+import { Role } from "../../enums/Role";
 
 @TypeGraphQL.ObjectType("UserGroupBy", {})
 export class UserGroupBy {
@@ -25,10 +24,10 @@ export class UserGroupBy {
   })
   email!: string;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
-  mobileNumber!: bigint;
+  mobileNumber!: string;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: false
@@ -49,6 +48,11 @@ export class UserGroupBy {
     nullable: true
   })
   verificationCode!: string | null;
+
+  @TypeGraphQL.Field(_type => Role, {
+    nullable: false
+  })
+  role!: "USER" | "ADMIN";
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -79,16 +83,6 @@ export class UserGroupBy {
     nullable: true
   })
   _count!: UserCountAggregate | null;
-
-  @TypeGraphQL.Field(_type => UserAvgAggregate, {
-    nullable: true
-  })
-  _avg!: UserAvgAggregate | null;
-
-  @TypeGraphQL.Field(_type => UserSumAggregate, {
-    nullable: true
-  })
-  _sum!: UserSumAggregate | null;
 
   @TypeGraphQL.Field(_type => UserMinAggregate, {
     nullable: true

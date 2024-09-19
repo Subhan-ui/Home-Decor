@@ -5,11 +5,12 @@ import { v4 as uuid } from "uuid";
 import { addHours } from "date-fns";
 import { User } from "../../prisma/generated/type-graphql/models";
 import jwt from "jsonwebtoken";
+import { uploadingImage } from "../lib/cloudinary";
 
-const createToken = (user: User, expiresIn: string) => {
-  const secret = process.env.APP_SECRET as string;
-  const { id, name, email } = user;
-  return jwt.sign({ id, name, email }, secret, { expiresIn });
+const createToken = (user: User) => {
+  const secret = (process.env.APP_SECRET as string) || "";
+  const { id, name, email, role } = user;
+  return jwt.sign({ id, name, email, role }, secret, { expiresIn: "7d" });
 };
 
 export const auth = {
@@ -47,7 +48,6 @@ export const auth = {
 
       return { user };
     } catch (error) {
-      console.error("Error signing up:", error);
       throw error;
     }
   },
@@ -69,7 +69,7 @@ export const auth = {
       return "Invalid Password";
     }
     return {
-      token: createToken(user, "70m"),
+      token: createToken(user),
       user,
     };
   },
@@ -126,24 +126,45 @@ export const auth = {
     });
     return "Password Reset Successfully";
   },
-  async updateUser({name, email, picture}:{name: string;email:string;picture:string;},{prisma}: Context){
-    const user = await prisma.user.findFirst({
-      where: {email}
-    })
-    if(!user){
-      return "User not found"
+  async updateUser(
+    {
+      name,
+      mobileNumber,
+      picture,
+    }: { name: string; mobileNumber: string; picture: string },
+    { prisma, me }: Context
+  ) {
+    if (!me) {
+      return "You need to login";
     }
     try {
+      const photo = await uploadingImage(picture);
       await prisma.user.update({
-        where: {email},
-        data:{
-          name, 
-          profilePicture:picture,
-        }
-      })
-      return "User updated Successfully"
+        where: { id: me.id },
+        data: {
+          name,
+          profilePicture: photo.secure_url,
+          mobileNumber,
+        },
+      });
+      return `User updated Successfully, picture=>${photo.public_id}.${photo.format}`;
     } catch (error) {
-      return error+""
+      return error + "";
     }
-  }
+  },
+  async changeRole({ prisma, me }: Context) {
+    if (!me) {
+      return "You need to login";
+    }
+    if (me.role === "ADMIN") {
+      return "You are already an admin";
+    }
+    await prisma.user.update({
+      where: { id: me.id },
+      data: {
+        role: "ADMIN",
+      },
+    });
+    return "You need to login again.";
+  },
 };

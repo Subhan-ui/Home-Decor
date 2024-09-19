@@ -3,11 +3,12 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AddressUpdateOneWithoutUserNestedInput } from "../inputs/AddressUpdateOneWithoutUserNestedInput";
-import { BigIntFieldUpdateOperationsInput } from "../inputs/BigIntFieldUpdateOperationsInput";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
 import { CartItemUpdateManyWithoutUserNestedInput } from "../inputs/CartItemUpdateManyWithoutUserNestedInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
+import { EnumRoleFieldUpdateOperationsInput } from "../inputs/EnumRoleFieldUpdateOperationsInput";
 import { FavouriteUpdateManyWithoutUserNestedInput } from "../inputs/FavouriteUpdateManyWithoutUserNestedInput";
+import { FurnitureItemUpdateManyWithoutUserNestedInput } from "../inputs/FurnitureItemUpdateManyWithoutUserNestedInput";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
 import { OrderUpdateManyWithoutUserNestedInput } from "../inputs/OrderUpdateManyWithoutUserNestedInput";
@@ -31,10 +32,10 @@ export class UserUpdateInput {
   })
   email?: StringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => BigIntFieldUpdateOperationsInput, {
+  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
     nullable: true
   })
-  mobileNumber?: BigIntFieldUpdateOperationsInput | undefined;
+  mobileNumber?: StringFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true
@@ -55,6 +56,11 @@ export class UserUpdateInput {
     nullable: true
   })
   verificationCode?: NullableStringFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => EnumRoleFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  role?: EnumRoleFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
     nullable: true
@@ -85,6 +91,11 @@ export class UserUpdateInput {
     nullable: true
   })
   address?: AddressUpdateOneWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => FurnitureItemUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  furnitureItem?: FurnitureItemUpdateManyWithoutUserNestedInput | undefined;
 
   @TypeGraphQL.Field(_type => OrderUpdateManyWithoutUserNestedInput, {
     nullable: true

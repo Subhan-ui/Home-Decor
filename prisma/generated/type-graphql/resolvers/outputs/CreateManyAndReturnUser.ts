@@ -2,6 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { Role } from "../../enums/Role";
 
 @TypeGraphQL.ObjectType("CreateManyAndReturnUser", {})
 export class CreateManyAndReturnUser {
@@ -20,10 +21,10 @@ export class CreateManyAndReturnUser {
   })
   email!: string;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
-  mobileNumber!: bigint;
+  mobileNumber!: string;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: false
@@ -44,6 +45,11 @@ export class CreateManyAndReturnUser {
     nullable: true
   })
   verificationCode!: string | null;
+
+  @TypeGraphQL.Field(_type => Role, {
+    nullable: false
+  })
+  role!: "USER" | "ADMIN";
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true

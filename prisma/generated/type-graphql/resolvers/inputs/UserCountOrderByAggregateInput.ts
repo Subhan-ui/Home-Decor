@@ -49,6 +49,11 @@ export class UserCountOrderByAggregateInput {
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
   })
+  role?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
   resetToken?: "asc" | "desc" | undefined;
 
   @TypeGraphQL.Field(_type => SortOrder, {

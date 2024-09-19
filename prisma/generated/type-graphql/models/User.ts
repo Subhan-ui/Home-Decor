@@ -5,8 +5,10 @@ import { DecimalJSScalar } from "../scalars";
 import { Address } from "../models/Address";
 import { CartItem } from "../models/CartItem";
 import { Favourite } from "../models/Favourite";
+import { FurnitureItem } from "../models/FurnitureItem";
 import { Order } from "../models/Order";
 import { Review } from "../models/Review";
+import { Role } from "../enums/Role";
 import { UserCount } from "../resolvers/outputs/UserCount";
 
 @TypeGraphQL.ObjectType("User", {})
@@ -26,10 +28,10 @@ export class User {
   })
   email!: string;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
-  mobileNumber!: bigint;
+  mobileNumber!: string;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: false
@@ -51,6 +53,11 @@ export class User {
   })
   verificationCode?: string | null;
 
+  @TypeGraphQL.Field(_type => Role, {
+    nullable: false
+  })
+  role!: "USER" | "ADMIN";
+
   @TypeGraphQL.Field(_type => String, {
     nullable: true
   })
@@ -67,6 +74,8 @@ export class User {
   profilePicture?: string | null;
 
   address?: Address | null;
+
+  furnitureItem?: FurnitureItem[];
 
   orders?: Order[];
 

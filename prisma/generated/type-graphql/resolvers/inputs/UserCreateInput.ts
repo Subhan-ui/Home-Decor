@@ -5,8 +5,10 @@ import { DecimalJSScalar } from "../../scalars";
 import { AddressCreateNestedOneWithoutUserInput } from "../inputs/AddressCreateNestedOneWithoutUserInput";
 import { CartItemCreateNestedManyWithoutUserInput } from "../inputs/CartItemCreateNestedManyWithoutUserInput";
 import { FavouriteCreateNestedManyWithoutUserInput } from "../inputs/FavouriteCreateNestedManyWithoutUserInput";
+import { FurnitureItemCreateNestedManyWithoutUserInput } from "../inputs/FurnitureItemCreateNestedManyWithoutUserInput";
 import { OrderCreateNestedManyWithoutUserInput } from "../inputs/OrderCreateNestedManyWithoutUserInput";
 import { ReviewCreateNestedManyWithoutUserInput } from "../inputs/ReviewCreateNestedManyWithoutUserInput";
+import { Role } from "../../enums/Role";
 
 @TypeGraphQL.InputType("UserCreateInput", {})
 export class UserCreateInput {
@@ -25,10 +27,10 @@ export class UserCreateInput {
   })
   email!: string;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
-  mobileNumber!: bigint;
+  mobileNumber!: string;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: false
@@ -49,6 +51,11 @@ export class UserCreateInput {
     nullable: true
   })
   verificationCode?: string | undefined;
+
+  @TypeGraphQL.Field(_type => Role, {
+    nullable: true
+  })
+  role?: "USER" | "ADMIN" | undefined;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true
@@ -79,6 +86,11 @@ export class UserCreateInput {
     nullable: true
   })
   address?: AddressCreateNestedOneWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => FurnitureItemCreateNestedManyWithoutUserInput, {
+    nullable: true
+  })
+  furnitureItem?: FurnitureItemCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => OrderCreateNestedManyWithoutUserInput, {
     nullable: true

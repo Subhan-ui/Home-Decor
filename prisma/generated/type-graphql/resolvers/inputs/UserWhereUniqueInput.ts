@@ -7,7 +7,9 @@ import { BoolFilter } from "../inputs/BoolFilter";
 import { CartItemListRelationFilter } from "../inputs/CartItemListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
+import { EnumRoleFilter } from "../inputs/EnumRoleFilter";
 import { FavouriteListRelationFilter } from "../inputs/FavouriteListRelationFilter";
+import { FurnitureItemListRelationFilter } from "../inputs/FurnitureItemListRelationFilter";
 import { OrderListRelationFilter } from "../inputs/OrderListRelationFilter";
 import { ReviewListRelationFilter } from "../inputs/ReviewListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
@@ -26,10 +28,10 @@ export class UserWhereUniqueInput {
   })
   email?: string | undefined;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: true
   })
-  mobileNumber?: bigint | undefined;
+  mobileNumber?: string | undefined;
 
   @TypeGraphQL.Field(_type => [UserWhereInput], {
     nullable: true
@@ -71,6 +73,11 @@ export class UserWhereUniqueInput {
   })
   verificationCode?: StringNullableFilter | undefined;
 
+  @TypeGraphQL.Field(_type => EnumRoleFilter, {
+    nullable: true
+  })
+  role?: EnumRoleFilter | undefined;
+
   @TypeGraphQL.Field(_type => StringNullableFilter, {
     nullable: true
   })
@@ -100,6 +107,11 @@ export class UserWhereUniqueInput {
     nullable: true
   })
   address?: AddressNullableRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => FurnitureItemListRelationFilter, {
+    nullable: true
+  })
+  furnitureItem?: FurnitureItemListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => OrderListRelationFilter, {
     nullable: true

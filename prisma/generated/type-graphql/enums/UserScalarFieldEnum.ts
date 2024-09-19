@@ -9,6 +9,7 @@ export enum UserScalarFieldEnum {
   password = "password",
   isEmailVerified = "isEmailVerified",
   verificationCode = "verificationCode",
+  role = "role",
   resetToken = "resetToken",
   resetTokenExpiry = "resetTokenExpiry",
   profilePicture = "profilePicture",

@@ -2,6 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { Role } from "../../enums/Role";
 
 @TypeGraphQL.ObjectType("UserMinAggregate", {})
 export class UserMinAggregate {
@@ -20,10 +21,10 @@ export class UserMinAggregate {
   })
   email!: string | null;
 
-  @TypeGraphQL.Field(_type => GraphQLScalars.BigIntResolver, {
+  @TypeGraphQL.Field(_type => String, {
     nullable: true
   })
-  mobileNumber!: bigint | null;
+  mobileNumber!: string | null;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
@@ -44,6 +45,11 @@ export class UserMinAggregate {
     nullable: true
   })
   verificationCode!: string | null;
+
+  @TypeGraphQL.Field(_type => Role, {
+    nullable: true
+  })
+  role!: "USER" | "ADMIN" | null;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true

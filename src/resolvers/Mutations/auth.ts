@@ -1,27 +1,26 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
 import { User } from "../../../prisma/generated/type-graphql/models";
-import { AuthResponse, AuthResponses, Context } from "../../types/types";
+import { AuthResponse, AuthResponses, Context, UserResponse } from "../../types/types";
 import { Users } from "../User";
 import { auth } from "../../services/auth.services";
-import path from "path";
-import cloudinary from "../../lib/cloudinary";
+import { uploadingImage } from "../../lib/cloudinary";
 
 @Resolver()
 export class AuthResolver {
-  @Query(() => [User])
+  @Query(() => [UserResponse])
   async getUsers(@Ctx() ctx: Context, args: User) {
     return Users.getUsers(args, ctx);
   }
-  @Query(() => User)
-  async getUser(@Arg("email") email: string, @Ctx() ctx: Context) {
-    return Users.getUser({ email }, ctx);
+  @Query(() => UserResponse)
+  async getUser(@Ctx() ctx: Context) {
+    return Users.getUser( ctx);
   }
   @Mutation(() => AuthResponses)
   async signUp(
     @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string,
-    @Arg("mobileNumber") mobileNumber: number,
+    @Arg("mobileNumber") mobileNumber: string,
     @Arg("dateOfBirth") dateOfBirth: String,
     @Ctx() ctx: Context
   ): Promise<AuthResponse | string> {
@@ -31,7 +30,6 @@ export class AuthResolver {
         ctx
       );
     } catch (error) {
-      console.error("Error in signUp resolver:", error);
       throw new Error("Signup failed");
     }
   }
@@ -91,15 +89,12 @@ export class AuthResolver {
 
   @Mutation(() => String)
   async uploadImage(
-    @Arg("picture") picture: String,
+    @Arg("picture") picture: string,
     @Arg("email") email: string,
     @Ctx() { prisma }: Context
   ) {
-    const mainDir = path.dirname(require.main?.filename || "");
-    picture = `${mainDir}/uploads/${picture}`;
     try {
-      const photo = await cloudinary.v2.uploader.upload(picture);
-      console.log("image upload");
+     const photo = await uploadingImage(picture)
       await prisma.user.update({
         where: { email: email },
         data: {
@@ -115,10 +110,17 @@ export class AuthResolver {
   @Mutation(() => String)
   async updateUser(
     @Arg("picture") picture: string,
-    @Arg("email") email: string,
+    @Arg("mobileNumber") mobileNumber: string,
     @Arg("name") name: string,
     @Ctx() ctx: Context
   ) {
-    return await auth.updateUser({ picture, email, name }, ctx);
+    return await auth.updateUser({ picture, mobileNumber, name }, ctx);
+  }
+
+  @Mutation(()=>String)
+  async changeRole(
+    @Ctx() ctx: Context
+  ){
+    return await auth.changeRole(ctx)
   }
 }

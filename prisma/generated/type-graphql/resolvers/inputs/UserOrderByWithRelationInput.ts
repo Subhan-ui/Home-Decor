@@ -5,6 +5,7 @@ import { DecimalJSScalar } from "../../scalars";
 import { AddressOrderByWithRelationInput } from "../inputs/AddressOrderByWithRelationInput";
 import { CartItemOrderByRelationAggregateInput } from "../inputs/CartItemOrderByRelationAggregateInput";
 import { FavouriteOrderByRelationAggregateInput } from "../inputs/FavouriteOrderByRelationAggregateInput";
+import { FurnitureItemOrderByRelationAggregateInput } from "../inputs/FurnitureItemOrderByRelationAggregateInput";
 import { OrderOrderByRelationAggregateInput } from "../inputs/OrderOrderByRelationAggregateInput";
 import { ReviewOrderByRelationAggregateInput } from "../inputs/ReviewOrderByRelationAggregateInput";
 import { SortOrderInput } from "../inputs/SortOrderInput";
@@ -52,6 +53,11 @@ export class UserOrderByWithRelationInput {
   })
   verificationCode?: SortOrderInput | undefined;
 
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  role?: "asc" | "desc" | undefined;
+
   @TypeGraphQL.Field(_type => SortOrderInput, {
     nullable: true
   })
@@ -81,6 +87,11 @@ export class UserOrderByWithRelationInput {
     nullable: true
   })
   address?: AddressOrderByWithRelationInput | undefined;
+
+  @TypeGraphQL.Field(_type => FurnitureItemOrderByRelationAggregateInput, {
+    nullable: true
+  })
+  furnitureItem?: FurnitureItemOrderByRelationAggregateInput | undefined;
 
   @TypeGraphQL.Field(_type => OrderOrderByRelationAggregateInput, {
     nullable: true

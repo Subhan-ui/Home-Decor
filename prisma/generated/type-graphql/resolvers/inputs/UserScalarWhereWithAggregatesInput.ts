@@ -2,10 +2,10 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { BigIntWithAggregatesFilter } from "../inputs/BigIntWithAggregatesFilter";
 import { BoolWithAggregatesFilter } from "../inputs/BoolWithAggregatesFilter";
 import { DateTimeNullableWithAggregatesFilter } from "../inputs/DateTimeNullableWithAggregatesFilter";
 import { DateTimeWithAggregatesFilter } from "../inputs/DateTimeWithAggregatesFilter";
+import { EnumRoleWithAggregatesFilter } from "../inputs/EnumRoleWithAggregatesFilter";
 import { StringNullableWithAggregatesFilter } from "../inputs/StringNullableWithAggregatesFilter";
 import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
@@ -41,10 +41,10 @@ export class UserScalarWhereWithAggregatesInput {
   })
   email?: StringWithAggregatesFilter | undefined;
 
-  @TypeGraphQL.Field(_type => BigIntWithAggregatesFilter, {
+  @TypeGraphQL.Field(_type => StringWithAggregatesFilter, {
     nullable: true
   })
-  mobileNumber?: BigIntWithAggregatesFilter | undefined;
+  mobileNumber?: StringWithAggregatesFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
     nullable: true
@@ -65,6 +65,11 @@ export class UserScalarWhereWithAggregatesInput {
     nullable: true
   })
   verificationCode?: StringNullableWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => EnumRoleWithAggregatesFilter, {
+    nullable: true
+  })
+  role?: EnumRoleWithAggregatesFilter | undefined;
 
   @TypeGraphQL.Field(_type => StringNullableWithAggregatesFilter, {
     nullable: true

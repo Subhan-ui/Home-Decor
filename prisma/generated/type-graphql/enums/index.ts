@@ -1,5 +1,6 @@
 export { AddressScalarFieldEnum } from "./AddressScalarFieldEnum";
 export { CartItemScalarFieldEnum } from "./CartItemScalarFieldEnum";
+export { Categories } from "./Categories";
 export { CategoryScalarFieldEnum } from "./CategoryScalarFieldEnum";
 export { FavouriteScalarFieldEnum } from "./FavouriteScalarFieldEnum";
 export { FurnitureItemScalarFieldEnum } from "./FurnitureItemScalarFieldEnum";
@@ -8,7 +9,9 @@ export { OrderItemScalarFieldEnum } from "./OrderItemScalarFieldEnum";
 export { OrderScalarFieldEnum } from "./OrderScalarFieldEnum";
 export { OrderStatus } from "./OrderStatus";
 export { QueryMode } from "./QueryMode";
+export { Rating } from "./Rating";
 export { ReviewScalarFieldEnum } from "./ReviewScalarFieldEnum";
+export { Role } from "./Role";
 export { SortOrder } from "./SortOrder";
 export { SubCategoryScalarFieldEnum } from "./SubCategoryScalarFieldEnum";
 export { TransactionIsolationLevel } from "./TransactionIsolationLevel";

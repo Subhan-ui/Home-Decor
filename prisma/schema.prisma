@@ -13,18 +13,20 @@ generator typegraphql {
 }
 
 model User {
-  id               String      @id @unique @default(cuid())
+  id               String          @id @unique @default(cuid())
   name             String
-  email            String      @unique
-  mobileNumber     BigInt      @unique
+  email            String          @unique
+  mobileNumber     String          @unique
   dateOfBirth      DateTime
   password         String
-  isEmailVerified  Boolean     @default(false)
+  isEmailVerified  Boolean         @default(false)
   verificationCode String?
+  role             Role            @default(USER)
   resetToken       String?
   resetTokenExpiry DateTime?
   profilePicture   String?
   address          Address?
+  furnitureItem    FurnitureItem[]
   orders           Order[]
   cartItems        CartItem[]
   favourites       Favourite[]
@@ -53,6 +55,8 @@ model FurnitureItem {
   description   String
   price         Float
   picture       String?
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
   category      Category    @relation(fields: [categoryId], references: [id])
   categoryId    String
   subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
@@ -67,8 +71,8 @@ model FurnitureItem {
 }
 
 model Category {
-  id             String          @id @default(cuid())
-  name           String
+  id             String          @id @default(cuid()) 
+  name           Categories
   subCategories  SubCategory[]
   furnitureItems FurnitureItem[]
 }
@@ -133,11 +137,24 @@ model Review {
   userId          String
   furnitureItem   FurnitureItem @relation(fields: [furnitureItemId], references: [id], onDelete: Cascade)
   furnitureItemId String
-  rating          Int
+  rating          Rating
   comment         String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum Rating {
+  WORST 
+  BAD
+  NORMAL
+  GOOD
+  BEST
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 enum OrderStatus {
@@ -145,4 +162,12 @@ enum OrderStatus {
   IN_PROGRESS
   DELIVERED
   CANCELED
+}
+
+enum Categories {
+  BedRoom
+  LivingRoom
+  Kitchen
+  Office
+  DinningRoom
 }
