@@ -1,12 +1,7 @@
-import {
-  Arg,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-} from "type-graphql";
-import { OrderType, Context } from "../../types/types";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+
 import { orders } from "../../services/order.services";
+import { OrderType, Context } from "../../types/types";
 
 @Resolver()
 export class OrderResolver {

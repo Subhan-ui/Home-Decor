@@ -6,9 +6,10 @@ import {
   registerEnumType,
   Resolver,
 } from "type-graphql";
-import { Context, ReviewItemType } from "../../types/types";
-import { reviews } from "../../services/review.services";
+
 import { Rating } from "../../../prisma/generated/type-graphql/enums/Rating";
+import { reviews } from "../../services/review.services";
+import { Context, ReviewItemType } from "../../types/types";
 
 registerEnumType(Rating, {
   name: "Rating",

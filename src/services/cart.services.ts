@@ -20,7 +20,7 @@ export const carts = {
       throw new Error("You need to login");
     }
     const cartItem = await prisma.cartItem.findFirst({
-      where: { furnitureItemId: id, userId:me.id },
+      where: { furnitureItemId: id, userId: me.id },
     });
     if (!cartItem) {
       return await prisma.cartItem.create({
@@ -48,9 +48,9 @@ export const carts = {
     try {
       await prisma.cartItem.delete({
         where: { id },
-        include:{
-            furnitureItem:true,
-        }
+        include: {
+          furnitureItem: true,
+        },
       });
       return "Item is remove from the cart";
     } catch (error) {

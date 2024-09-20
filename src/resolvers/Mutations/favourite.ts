@@ -1,12 +1,7 @@
-import {
-  Arg,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-} from "type-graphql";
-import { FavouriteType, Context } from "../../types/types";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+
 import { favourites } from "../../services/favourite.services";
+import { FavouriteType, Context } from "../../types/types";
 
 @Resolver()
 export class FavouriteResolver {
@@ -15,8 +10,8 @@ export class FavouriteResolver {
     return await favourites.getUserFavourite(ctx);
   }
 
-  @Query(()=>[FavouriteType])
-  async getItemFavourites(@Arg("itemId") itemId:string, @Ctx() ctx: Context) {
+  @Query(() => [FavouriteType])
+  async getItemFavourites(@Arg("itemId") itemId: string, @Ctx() ctx: Context) {
     return await favourites.getItemFavourites({ itemId }, ctx);
   }
 
@@ -25,7 +20,7 @@ export class FavouriteResolver {
     return await favourites.addToFavourite({ itemId }, ctx);
   }
 
-  @Mutation(()=>String)
+  @Mutation(() => String)
   async removeFromFavourites(@Arg("id") id: string, @Ctx() ctx: Context) {
     return await favourites.removeFavourite({ id }, ctx);
   }

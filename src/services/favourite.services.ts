@@ -19,10 +19,10 @@ export const favourites = {
   ) => {
     return await prisma.favourite.findMany({
       where: { furnitureItemId: itemId },
-      include:{
-        furnitureItem:true,
-        user:true,
-      }
+      include: {
+        furnitureItem: true,
+        user: true,
+      },
     });
   },
   addToFavourite: async (

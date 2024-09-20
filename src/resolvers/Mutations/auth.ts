@@ -1,9 +1,16 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from "type-graphql";
+
 import { User } from "../../../prisma/generated/type-graphql/models";
-import { AuthResponse, AuthResponses, Context, UserResponse } from "../../types/types";
-import { Users } from "../User";
 import { auth } from "../../services/auth.services";
 import { uploadingImage } from "../../lib/cloudinary";
+
+import {
+  AuthResponse,
+  AuthResponses,
+  Context,
+  UserResponse,
+} from "../../types/types";
+import { Users } from "../User";
 
 @Resolver()
 export class AuthResolver {
@@ -13,7 +20,7 @@ export class AuthResolver {
   }
   @Query(() => UserResponse)
   async getUser(@Ctx() ctx: Context) {
-    return Users.getUser( ctx);
+    return Users.getUser(ctx);
   }
   @Mutation(() => AuthResponses)
   async signUp(
@@ -94,7 +101,7 @@ export class AuthResolver {
     @Ctx() { prisma }: Context
   ) {
     try {
-     const photo = await uploadingImage(picture)
+      const photo = await uploadingImage(picture);
       await prisma.user.update({
         where: { email: email },
         data: {
@@ -117,10 +124,8 @@ export class AuthResolver {
     return await auth.updateUser({ picture, mobileNumber, name }, ctx);
   }
 
-  @Mutation(()=>String)
-  async changeRole(
-    @Ctx() ctx: Context
-  ){
-    return await auth.changeRole(ctx)
+  @Mutation(() => String)
+  async changeRole(@Ctx() ctx: Context) {
+    return await auth.changeRole(ctx);
   }
 }

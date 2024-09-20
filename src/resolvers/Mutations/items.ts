@@ -6,10 +6,12 @@ import {
   registerEnumType,
   Resolver,
 } from "type-graphql";
+
 import { FurnitureItem } from "../../../prisma/generated/type-graphql/models";
-import { Context, ItemResponse } from "../../types/types";
-import { items } from "../../services/items.services";
 import { Categories } from "../../../prisma/generated/type-graphql/enums/Categories";
+
+import { items } from "../../services/items.services";
+import { Context, ItemResponse } from "../../types/types";
 
 registerEnumType(Categories, {
   name: "Categories",
