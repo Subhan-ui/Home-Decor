@@ -1,11 +1,19 @@
-import { sendVerificationEmail } from "../lib/nodemail";
-import { Context, SignUpArgs } from "../types/types";
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { addHours } from "date-fns";
-import { User } from "../../prisma/generated/type-graphql/models";
 import jwt from "jsonwebtoken";
+
+import { User } from "../../prisma/generated/type-graphql/models";
+import { sendVerificationEmail } from "../lib/nodemail";
 import { uploadingImage } from "../lib/cloudinary";
+import {
+  Context,
+  emailType,
+  loginType,
+  resetPasswordType,
+  SignUpArgs,
+  updateUser,
+} from "../types/types";
 
 const createToken = (user: User) => {
   const secret = (process.env.APP_SECRET as string) || "";
@@ -51,10 +59,7 @@ export const auth = {
       throw error;
     }
   },
-  async login(
-    { email, password }: { email: string; password: string },
-    context: Context
-  ) {
+  async login({ email, password }: loginType, context: Context) {
     const user = await context.prisma.user.findUnique({
       where: { email },
     });
@@ -73,7 +78,7 @@ export const auth = {
       user,
     };
   },
-  async forgotPassword({ email }: { email: string }, context: Context) {
+  async forgotPassword({ email }: emailType, context: Context) {
     const user = await context.prisma.user.findFirst({
       where: { email },
     });
@@ -96,7 +101,7 @@ export const auth = {
     return "Password Reset Email Send Successfully";
   },
   async resetPassword(
-    { resetToken, newPassword }: { resetToken: string; newPassword: string },
+    { resetToken, newPassword }: resetPasswordType,
     context: Context
   ) {
     const user = await context.prisma.user.findFirst({
@@ -127,11 +132,7 @@ export const auth = {
     return "Password Reset Successfully";
   },
   async updateUser(
-    {
-      name,
-      mobileNumber,
-      picture,
-    }: { name: string; mobileNumber: string; picture: string },
+    { name, mobileNumber, picture }: updateUser,
     { prisma, me }: Context
   ) {
     if (!me) {

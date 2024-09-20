@@ -1,5 +1,5 @@
-import { Context, itemType } from "../types/types";
 import { uploadingImage } from "../lib/cloudinary";
+import { Context, itemType } from "../types/types";
 
 export const items = {
   getItems: async ({ prisma }: Context) => {

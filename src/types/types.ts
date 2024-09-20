@@ -1,20 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { Field, ObjectType } from "type-graphql";
-import {
-  Address,
-  CartItem,
-  Category,
-  Favourite,
-  FurnitureItem,
-  Order,
-  OrderItem,
-  Review,
-  SubCategory,
-  User,
-} from "../../prisma/generated/type-graphql/models";
+
 import { Stream } from "stream";
 import { Categories } from "../../prisma/generated/type-graphql/enums/Categories";
 import { Rating } from "../../prisma/generated/type-graphql/enums/Rating";
+import {
+  Category,
+  FurnitureItem,
+  SubCategory,
+  User,
+} from "../../prisma/generated/type-graphql/models";
 
 export interface Upload {
   filename: string;
@@ -22,6 +17,31 @@ export interface Upload {
   encoding: string;
   createReadStream: () => Stream;
 }
+
+export type updateUser = {
+  name: string;
+  mobileNumber: string;
+  picture: string;
+};
+
+export type loginType = { email: string; password: string };
+
+export type emailType = { email: string };
+
+export type resetPasswordType = { resetToken: string; newPassword: string };
+
+export type cartItemType = { id: string; quantity: number };
+
+export type idType = { id?: string; cartId?: string };
+
+export type itemIdType = { itemId: string };
+
+export type orderItemType = { productId: string; quantity: number };
+
+export type productIdType = { productId: string };
+
+export type reviewType = { productId: string; rating: Rating; comment: string };
+
 export type Context = {
   prisma: PrismaClient;
   me?: User;
@@ -41,6 +61,32 @@ export type authType = {
     createdAt: Date;
   };
 };
+
+export type SignUpArgs = {
+  name: string;
+  email: string;
+  password: string;
+  mobileNumber: string;
+  dateOfBirth: String;
+};
+
+export type addressType = {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+};
+
+export type itemType = {
+  name: string;
+  description: string;
+  price: number;
+  picture?: string;
+  category: Categories;
+  subCategory: string;
+};
+
 @ObjectType()
 export class AuthResponse {
   @Field({ nullable: true })
@@ -59,10 +105,10 @@ class FurnitureItemTypes {
   @Field(() => Number, { nullable: true })
   price?: number;
   @Field(() => String, { nullable: true })
-  picture?: string;  
+  picture?: string;
   @Field(() => Category, { nullable: true })
   category?: Category;
-  @Field(()=> SubCategory, {nullable: true})
+  @Field(() => SubCategory, { nullable: true })
   subCategory?: SubCategory;
 }
 
@@ -163,31 +209,6 @@ export class FavouriteType {
   user?: User;
 }
 
-export type SignUpArgs = {
-  name: string;
-  email: string;
-  password: string;
-  mobileNumber: string;
-  dateOfBirth: String;
-};
-
-export type addressType = {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
-
-export type itemType = {
-  name: string;
-  description: string;
-  price: number;
-  picture?: string;
-  category: Categories;
-  subCategory: string;
-};
-
 @ObjectType()
 class Orders {
   @Field(() => Number, { nullable: true })
@@ -209,7 +230,6 @@ class Cart {
     return (this.quantity ?? 0) * (this.furnitureItem?.price ?? 0);
   }
 }
-
 
 @ObjectType()
 export class UserResponse {
@@ -245,5 +265,4 @@ export class UserResponse {
 
   @Field(() => [ReviewItemType], { nullable: true })
   reviews?: ReviewItemType[];
-
 }

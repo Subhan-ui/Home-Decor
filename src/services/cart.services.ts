@@ -1,4 +1,4 @@
-import { Context } from "../types/types";
+import { cartItemType, Context, idType } from "../types/types";
 
 export const carts = {
   getCartItems: async ({ prisma, me }: Context) => {
@@ -13,7 +13,7 @@ export const carts = {
     });
   },
   addItemToCart: async (
-    { id, quantity }: { id: string; quantity: number },
+    { id, quantity }: cartItemType,
     { me, prisma }: Context
   ) => {
     if (!me) {
@@ -38,10 +38,7 @@ export const carts = {
       },
     });
   },
-  removeItemFromCart: async (
-    { id }: { id: string },
-    { prisma, me }: Context
-  ) => {
+  removeItemFromCart: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
@@ -57,10 +54,7 @@ export const carts = {
       return "An error occured";
     }
   },
-  addSingleItem: async (
-    { cartId: id }: { cartId: string },
-    { prisma, me }: Context
-  ) => {
+  addSingleItem: async ({ cartId: id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
@@ -82,10 +76,7 @@ export const carts = {
       return "An error occured";
     }
   },
-  removeSingleItem: async (
-    { cartId: id }: { cartId: string },
-    { prisma, me }: Context
-  ) => {
+  removeSingleItem: async ({ cartId: id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }

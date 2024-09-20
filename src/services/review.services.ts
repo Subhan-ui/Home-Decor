@@ -1,11 +1,7 @@
-import { Rating } from "../../prisma/generated/type-graphql/enums/Rating";
-import { Context } from "../types/types";
+import { Context, idType, productIdType, reviewType } from "../types/types";
 
 export const reviews = {
-  getReviews: async (
-    { productId }: { productId: string },
-    { prisma }: Context
-  ) => {
+  getReviews: async ({ productId }: productIdType, { prisma }: Context) => {
     return await prisma.review.findMany({
       where: { furnitureItemId: productId },
       include: {
@@ -15,11 +11,7 @@ export const reviews = {
     });
   },
   addReview: async (
-    {
-      productId,
-      rating,
-      comment,
-    }: { productId: string; rating: Rating; comment: string },
+    { productId, rating, comment }: reviewType,
     { prisma, me }: Context
   ) => {
     if (!me) {
@@ -39,7 +31,7 @@ export const reviews = {
       return "An error occured" + error;
     }
   },
-  deleteReview: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  deleteReview: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }

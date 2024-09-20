@@ -1,4 +1,4 @@
-import { Context } from "../types/types";
+import { Context, idType, itemIdType } from "../types/types";
 
 export const favourites = {
   getUserFavourite: async ({ prisma, me }: Context) => {
@@ -13,10 +13,7 @@ export const favourites = {
       },
     });
   },
-  getItemFavourites: async (
-    { itemId }: { itemId: string },
-    { prisma }: Context
-  ) => {
+  getItemFavourites: async ({ itemId }: itemIdType, { prisma }: Context) => {
     return await prisma.favourite.findMany({
       where: { furnitureItemId: itemId },
       include: {
@@ -25,10 +22,7 @@ export const favourites = {
       },
     });
   },
-  addToFavourite: async (
-    { itemId }: { itemId: string },
-    { prisma, me }: Context
-  ) => {
+  addToFavourite: async ({ itemId }: itemIdType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
@@ -47,7 +41,7 @@ export const favourites = {
     });
     return "Item added to favourites";
   },
-  removeFavourite: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  removeFavourite: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "YOu need to login";
     }

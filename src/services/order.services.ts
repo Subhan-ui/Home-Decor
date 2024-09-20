@@ -1,4 +1,4 @@
-import { Context } from "../types/types";
+import { Context, idType, orderItemType } from "../types/types";
 
 export const orders = {
   getOrders: async ({ prisma, me }: Context) => {
@@ -27,7 +27,7 @@ export const orders = {
     throw new Error("No orders found");
   },
   addOrderItem: async (
-    { productId, quantity }: { productId: string; quantity: number },
+    { productId, quantity }: orderItemType,
     { prisma, me }: Context
   ) => {
     if (!me) {
@@ -103,7 +103,7 @@ export const orders = {
       return "An error occured" + error;
     }
   },
-  makeOrder: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  makeOrder: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to Login";
     }
@@ -122,7 +122,7 @@ export const orders = {
     });
     return "Order made successfully";
   },
-  delivered: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  delivered: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
@@ -150,7 +150,7 @@ export const orders = {
     });
     return "Order delivered successfully";
   },
-  cancelOrder: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  cancelOrder: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
@@ -172,7 +172,7 @@ export const orders = {
     });
     return "Your order is cancelled";
   },
-  deleted: async ({ id }: { id: string }, { prisma, me }: Context) => {
+  deleted: async ({ id }: idType, { prisma, me }: Context) => {
     if (!me) {
       return "You need to login";
     }
