@@ -139,6 +139,8 @@ export class AuthResponses {
 export class ItemResponse {
   @Field(() => String, { nullable: true })
   name?: string;
+  @Field(() => String, { nullable: true })
+  id?: string;
   @Field(() => Number, { nullable: true })
   price?: number;
   @Field(() => String, { nullable: true })
