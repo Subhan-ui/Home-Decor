@@ -1,9 +1,10 @@
 import "reflect-metadata";
-import { createServer } from "node:http";
+import { createServer, IncomingMessage, ServerResponse } from "node:http";
 import { createYoga, YogaInitialContext } from "graphql-yoga";
 import { PrismaClient } from "@prisma/client";
 import { createSchema } from "./schema";
 import jwt from "jsonwebtoken";
+import { middleware } from "./lib/middleware";
 
 const prisma = new PrismaClient();
 const loggedUser = (req: YogaInitialContext) => {
@@ -18,7 +19,7 @@ const loggedUser = (req: YogaInitialContext) => {
   } catch (error) {
     return "Session Expired";
   }
-};
+}
 
 async function startServer() {
   const schema = await createSchema();
@@ -34,6 +35,9 @@ async function startServer() {
   });
 
   const server = createServer(yoga);
+  server.on("request", (req: IncomingMessage, res: ServerResponse) => {
+    middleware.forEach((fn) => fn(req, res, () => {}));
+  });
   const PORT = process.env.PORT || 4000;
 
   server.listen(PORT, () => {
@@ -44,3 +48,5 @@ async function startServer() {
 startServer().catch((error) => {
   console.error("Error starting server:", error);
 });
+
+
