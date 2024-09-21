@@ -4,9 +4,9 @@
   "description": "This ticket outlines the development and implementation of a comprehensive furniture e-commerce application. The application will feature secure user authentication, including login, signup, and password reset functionalities. Users will be able to manage their profiles, including personal information and addresses. The application will include an extensive catalog of furniture items categorized by type and subcategories according to distributed spaces, such as sofas, beds, and chairs. It will also allow users to manage their shopping cart and favorite products. Additionally, users will be able to place orders and track them through various stages, from processing to delivery. The system will include a review feature, allowing users to add and read reviews for furniture items.",
   "main": "index.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "nodemon --exec ts-node src/index.ts",
-    "start": "ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --max-old-space-size=4096 -r ts-node/register src/index.ts"
   },
   "author": "Subhan Shoukat",
   "license": "ISC",
