@@ -37,7 +37,7 @@ export class AuthResolver {
         ctx
       );
     } catch (error) {
-      throw new Error("Signup failed");
+      throw new Error("Signup failed"+ error);
     }
   }
 

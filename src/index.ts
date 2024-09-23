@@ -40,13 +40,13 @@ async function startServer() {
   });
   const PORT = process.env.PORT || 4000;
 
-  server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}/graphql`);
+  server.listen(PORT, ()=>{
+    return 'server started'
   });
 }
 
 startServer().catch((error) => {
-  console.error("Error starting server:", error);
+  return error;
 });
 
 

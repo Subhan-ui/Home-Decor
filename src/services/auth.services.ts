@@ -30,8 +30,14 @@ export const auth = {
       const existingUser = await context.prisma.user.findUnique({
         where: { email },
       });
+      const existUserMbl = await context.prisma.user.findUnique({
+        where:{mobileNumber}
+      })
       if (existingUser) {
         throw new Error("Email already in use");
+      }
+      if(existUserMbl){
+        throw new Error("Mobile Number already exists");
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);

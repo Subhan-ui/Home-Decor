@@ -21,9 +21,9 @@ export async function sendVerificationEmail(
 
   await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error("❌ Error:", error.message);
+      return error.message
     } else {
-      console.log("✅ Email sent:", info.response);
+      return 'Email Sent '+ info.response
     }
   });
 }
