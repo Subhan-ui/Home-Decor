@@ -5,6 +5,11 @@ import { PrismaClient } from "@prisma/client";
 import { createSchema } from "./schema";
 import jwt from "jsonwebtoken";
 import { middleware } from "./lib/middleware";
+import { costLimitPlugin } from '@escape.tech/graphql-armor-cost-limit'
+import { maxAliasesPlugin } from '@escape.tech/graphql-armor-max-aliases'
+import { maxDepthPlugin } from '@escape.tech/graphql-armor-max-depth'
+import { maxDirectivesPlugin } from '@escape.tech/graphql-armor-max-directives'
+import { maxTokensPlugin } from '@escape.tech/graphql-armor-max-tokens'
 
 const prisma = new PrismaClient();
 const loggedUser = (req: YogaInitialContext) => {
@@ -25,6 +30,13 @@ async function startServer() {
   const schema = await createSchema();
 
   const yoga = createYoga({
+    plugins: [
+      costLimitPlugin(),
+      maxTokensPlugin(),
+      maxDepthPlugin(),
+      maxDirectivesPlugin(),
+      maxAliasesPlugin()
+    ],
     schema,
     context: (req: YogaInitialContext) => {
       return {

@@ -12,6 +12,11 @@
   "author": "Subhan Shoukat",
   "license": "ISC",
   "dependencies": {
+    "@escape.tech/graphql-armor-cost-limit": "^2.2.0",
+    "@escape.tech/graphql-armor-max-aliases": "^2.5.0",
+    "@escape.tech/graphql-armor-max-depth": "^2.3.0",
+    "@escape.tech/graphql-armor-max-directives": "^2.2.0",
+    "@escape.tech/graphql-armor-max-tokens": "^2.4.0",
     "@prisma/client": "^5.19.1",
     "@railway/cli": "^3.14.0",
     "@types/graphql-fields": "^1.3.9",
