@@ -30,6 +30,7 @@ async function startServer() {
   const schema = await createSchema();
 
   const yoga = createYoga({
+    maskedErrors:false,
     plugins: [
       costLimitPlugin(),
       maxTokensPlugin(),
