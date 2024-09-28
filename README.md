@@ -146,7 +146,7 @@ To run this project, you will need to add the following environment variables to
 
 #### Then endpoint for all GraphQL api is as follows
 
-```http
+```
   /graphql
 ```
 
@@ -157,7 +157,7 @@ Queries and Mutations parameter and outputs types all are available in graphql d
 
 ### Register
 
-```http
+```
  mutation {
   signUp(
     name: "Abdul Mueed"
@@ -183,7 +183,7 @@ Queries and Mutations parameter and outputs types all are available in graphql d
 | dateOfBirth | string | Required: Date of Birth of the user. |
 
 ### Next step is verification of email address.
-```http
+```
 mutation {
   verifyEmail(email: "xoxivis413@abevw.com", verificationCode: "verification code you received from the email")
 }
@@ -195,7 +195,7 @@ mutation {
 | verificationCode | string | Required: code received after signing up through email |
 
 ### Login
-```http
+```
 mutation {
   login(email:"xoxivis413@abevw.com", password:"password"){
   token
@@ -212,7 +212,7 @@ mutation {
 | password | string | Required: password with that specified Email Address |
 
 token that we received from when we login we need to use that token to put it in the header as follows.
- ```http
+ ```
  {
     "authorization":"Your token here"
  }
@@ -224,7 +224,7 @@ After completing these steps now you are completely logged in.
 For changing the password, there are total 2 steps involved. First step is getting the email which include the reset token using which we will change the password.
 
 #### 1st Step:
-```http
+```
 mutation {
  forgotPassword(email:"xoxivis413@abevw.com")
 }
@@ -232,7 +232,7 @@ mutation {
 A reset token will be received now in this email address, we will take that token to change the password.
 
 #### 2nd Step:
-```http
+```
 mutation {
   resetPassword(
     resetToken: "token here"
@@ -254,7 +254,7 @@ We can only update user's profile photo or we can update user every detail at on
 
 #### Updating Profile Picture.
 
-```http
+```
 mutation {
   uploadImage(email: "xoxivis413@abevw.com", picture: "pp1.jpg")
 }
@@ -263,7 +263,7 @@ Right now I have only two options for uploading profile picture. 1 is pp1.jpg an
 
 #### Updating User Data
 
-```http
+```
 mutation {
   updateUser(
     name: "Some other name"
@@ -285,7 +285,7 @@ The above function can only works if the user is logged in.
 
 ### Adding Address with the user.
 
-```http
+```
 mutation {
   addAddress(
     country: "Pakistan"
@@ -302,7 +302,7 @@ mutation {
 To add the address obviously one need to be logged in.
 
 ### Update Address 
-```http
+```
 mutation {
   updateAddress(
     country: "Pakistan"
@@ -316,7 +316,7 @@ mutation {
 To Change the address the user need to be logged in..
 
 ### Delete Address
-```http
+```
 mutation{
   deleteAddress
 }
@@ -337,7 +337,7 @@ To delete the address the user need to be logged in.
 To add new furniture items to the catalog, users must have the "admin" role. Users with the "user" role are restricted from creating items. This ensures that only authorized individuals can modify the product database.
 
 ### Add Furniture Item
-```http
+```
 mutation {
   addItem(
     subCategory: "Bed"
@@ -356,7 +356,7 @@ mutation {
 
 The ```picture``` parameter currently accepts the following image file types: ```bed.webp```, ```BedSheet.jpg```, ```chair.jpg```, ```sofa.jpg```, and ```table.jpg```. When the valid parameters are provided, the API returns a complete item object representing the newly created furniture item.
 
-```http
+```
 enum Categories {
   BedRoom
   LivingRoom
@@ -381,7 +381,7 @@ enum Categories {
 ### Adding Item to Cart
 To add a furniture item to the cart, users must be logged in. The required parameter for adding an item is the unique identifier (ID) of the desired furniture item. This ID is used to locate the specific item in the database and add it to the user's cart and second is quantity of the specific item.
 
-```http
+```
 mutation {
   addItemToCart(quantity: 2, id: "cm1kmefxj000as7zjk9z63w0r") {
     id
@@ -395,7 +395,7 @@ mutation {
 | id | string | Required: Id of the furniture item that you want to add in your cart. |
 
 ### Adding Single Item to Cart
-```http
+```
 mutation {
   addSingleItem(cartId:"cm1kmh048000es7zjetv7fzfi")
 }
@@ -404,7 +404,7 @@ mutation {
 To use this mutation cartItem should already exist then we can increase its quantity by 1 by giving its id as cartId here in this mutation.
 
 ### Removing Single Item from Cart
-```http
+```
 mutation {
   removeSingleItem(cartId:"cm1kmh048000es7zjetv7fzfi")
 }
@@ -412,7 +412,7 @@ mutation {
 Similarly, We can use removeSingleItem to decrease cart's quantity by 1.
 
 ### Remove Cart Item.
-```http
+```
 mutation {
   removeCartItem(id:"cm1kmh048000es7zjetv7fzfi")
 }
@@ -425,7 +425,7 @@ User need to be login in order to perform the actions related to favourite. User
 
 ### Adding an Item to Favourite
 
-```http
+```
 mutation {
   addToFavourites(itemId:"cm1klymin0006s7zjj9vx6ept")
 }
@@ -438,7 +438,7 @@ This is how an item can be added to the cart.
 
 ### Removing an Item from Favourite
 
-```http
+```
 mutation {
   removeFromFavourites(id:"cm1koa7z9000gs7zjck1mp7iq")
 }
@@ -453,7 +453,7 @@ mutation {
 ### Adding Order Item
 The addOrderItem mutation allows an authenticated user to add an item to their order. The item can either be added to an existing pending order or a new order can be created. If the item already exists in the order, its quantity is updated. If not, a new item is created in the order. The order's total price is updated accordingly.
 
-```http
+```
 mutation{
   addOrderItem(quantity:2, productId:"cm1kmf8fa000cs7zj4x1i5wa4")
 }
@@ -480,7 +480,7 @@ mutation{
 ### Confirming an order.
 The ```makeOrder``` mutation allows an authenticated user to confirm and proceed with an order that is in the ```PENDING``` status, changing its status to ```IN_PROGRESS```.
 
-```http
+```
 mutation{
   makeOrder(id:"cm1koghp6000is7zj6fqqt8wn")
 }
@@ -492,7 +492,7 @@ mutation{
 ### Delivered
 The delivered mutation allows only an admin to mark an order as ```DELIVERED``` once it has been processed.
 
-```http
+```
 mutation{
   deliverOrder(id:"cm1koghp6000is7zj6fqqt8wn")
 }
@@ -504,7 +504,7 @@ mutation{
 ### Cancelling an order
 The cancelOrder mutation allows an authenticated user to cancel their own pending order.
 
-```http
+```
 mutation{
   cancelOrder(id:"cm1koghp6000is7zj6fqqt8wn")
 }
@@ -516,7 +516,7 @@ mutation{
 ### Deleting an order
 The deleteOrder mutation allows an authenticated user to delete their order, along with all associated order items, from the system.
 
-```http
+```
 mutation{
   deleteOrder(id:"cm1koghp6000is7zj6fqqt8wn")
 }
@@ -534,7 +534,7 @@ An authenticated user can add or delete a review. User can only delete a review 
 ### Adding Review.
 The example for adding a review is as follows:
 
-```http
+```
 mutation {
   addReview(
     comment: "Some comment here"
@@ -544,7 +544,7 @@ mutation {
 }
 ```
 
-```http
+```
 enum Rating {
   WORST 
   BAD
@@ -564,7 +564,7 @@ enum Rating {
 
 The example for removing a review is as follows:
 
-```http
+```
 mutation {
   deleteReview(id: "cm1lw466w0001amapljl9ziyq")
 }
