@@ -572,3 +572,20 @@ mutation {
 | Parameter | Type | Description |
 |---|---|---|
 | id | string | Required: The unique identifier of the review that you want to delete. |
+
+
+## Contributing
+Contributions are welcome!
+
+## Acknowledgments
+Special Thanks to the [Techloset Team](https://www.techloset.com/) for their valuable guidelines.
+
+
+## Support
+If you have any questions or need support, feel free to reach out via [subhanshoukat1908@gmail.com](mailto:subhanshoukat1908@gmail.com)
+
+
+
+---
+
+Thank you for using our project! If you find any issues or have any suggestions for improvement, feel free to contribute or reach out.
