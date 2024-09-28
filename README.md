@@ -586,6 +586,11 @@ If you have any questions or need support, feel free to reach out via [subhansho
 
 
 
+## Authors
+
+- [@Subhan Shoukat](https://github.com/Subhan-ui)
+
+
 ---
 
 Thank you for using our project! If you find any issues or have any suggestions for improvement, feel free to contribute or reach out.
