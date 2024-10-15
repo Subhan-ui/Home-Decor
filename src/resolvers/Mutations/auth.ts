@@ -37,7 +37,7 @@ export class AuthResolver {
         ctx
       );
     } catch (error) {
-      throw new Error("Signup failed"+ error);
+      throw new Error("Signup failed" + error);
     }
   }
 
@@ -119,9 +119,13 @@ export class AuthResolver {
     @Arg("picture") picture: string,
     @Arg("mobileNumber") mobileNumber: string,
     @Arg("name") name: string,
+    @Arg("dateOfBirth") dateOfBirth: string,
     @Ctx() ctx: Context
   ) {
-    return await auth.updateUser({ picture, mobileNumber, name }, ctx);
+    return await auth.updateUser(
+      { picture, mobileNumber, name, dateOfBirth },
+      ctx
+    );
   }
 
   @Mutation(() => String)

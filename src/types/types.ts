@@ -22,6 +22,7 @@ export type updateUser = {
   name: string;
   mobileNumber: string;
   picture: string;
+  dateOfBirth: string;
 };
 
 export type loginType = { email: string; password: string };

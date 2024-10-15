@@ -138,7 +138,7 @@ export const auth = {
     return "Password Reset Successfully";
   },
   async updateUser(
-    { name, mobileNumber, picture }: updateUser,
+    { name, mobileNumber, picture, dateOfBirth }: updateUser,
     { prisma, me }: Context
   ) {
     if (!me) {
@@ -150,6 +150,7 @@ export const auth = {
         where: { id: me.id },
         data: {
           name,
+          dateOfBirth,
           profilePicture: photo.secure_url,
           mobileNumber,
         },
