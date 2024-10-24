@@ -164,12 +164,16 @@ export class ItemResponse {
 export class SubCategoryType {
   @Field(() => String, { nullable: true })
   name?: string;
+  @Field(() => String, { nullable: true })
+  id?: string;
 }
 
 @ObjectType()
 export class CategoryType {
   @Field(() => String, { nullable: true })
   name?: string;
+  @Field(() => String, { nullable: true })
+  id?: string;
   @Field(() => [SubCategoryType], { nullable: true })
   subCategories?: SubCategoryType[];
 }

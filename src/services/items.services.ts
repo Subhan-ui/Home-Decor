@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 import { uploadingImage } from "../lib/cloudinary";
-import { Context, itemType } from "../types/types";
+import { Context, idType, itemType } from "../types/types";
 
 export const items = {
   getItems: async ({ prisma }: Context) => {
@@ -8,12 +8,25 @@ export const items = {
       include: { user: true, category: true, subCategory: true },
     });
   },
+  getCategoryItems: async ({id}:idType,{ prisma }: Context) => {
+    const items = await prisma.furnitureItem.findMany({
+      where:{categoryId: id},
+      include:{
+        category: true,
+        subCategory: true
+      }
+    })
+    if(!items){
+      throw new Error("No items found")
+    }
+    return items;
+  },
   getMyItem: async ({ prisma, me }: Context) => {
     if (!me?.id) {
-      throw new GraphQLError('User not authenticated', {
+      throw new GraphQLError("User not authenticated", {
         extensions: {
-          code: 'UNAUTHENTICATED',
-          http: { status: 401 }, 
+          code: "UNAUTHENTICATED",
+          http: { status: 401 },
         },
       });
     }
@@ -62,10 +75,10 @@ export const items = {
     { me, prisma }: Context
   ) => {
     if (!me?.id) {
-      throw new GraphQLError('User not authenticated', {
+      throw new GraphQLError("User not authenticated", {
         extensions: {
-          code: 'UNAUTHENTICATED',
-          http: { status: 401 }, 
+          code: "UNAUTHENTICATED",
+          http: { status: 401 },
         },
       });
     }
@@ -126,5 +139,29 @@ export const items = {
       },
     });
     return item;
+  },
+  searchItems: async (
+    { searchTerm }: { searchTerm: string },
+    { prisma }: Context
+  ) => {
+    const items = await prisma.furnitureItem.findMany({
+      include: { user: true, category: true, subCategory: true },
+      where: {
+        OR: [
+          { name: { contains: searchTerm, mode: "insensitive" } },
+          { description: { contains: searchTerm, mode: "insensitive" } },
+          {
+            subCategory: {
+              name: { contains: searchTerm, mode: "insensitive" },
+            },
+          },
+        ],
+      },
+    });
+  
+    if (!items.length) {
+      throw new Error("No items found");
+    }
+    return items;
   },
 };

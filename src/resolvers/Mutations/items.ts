@@ -27,6 +27,16 @@ export class ItemsResolver {
   async getMyItems(@Ctx() ctx: Context) {
     return await items.getMyItem(ctx);
   }
+  @Query(()=>[ItemResponse])
+  async getCategoryItems(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return await items.getCategoryItems({ id }, ctx);
+  }
+
+  @Query(() => [ItemResponse])
+  async searchItems(@Arg("term") term: string, @Ctx() ctx: Context) {
+    return await items.searchItems({ searchTerm: term }, ctx);
+  }
+
   @Query(() => [CategoryType])
   async getCategories(@Ctx() ctx: Context) {
     return await items.getCategories(ctx);
@@ -55,4 +65,6 @@ export class ItemsResolver {
       ctx
     );
   }
+
+
 }
