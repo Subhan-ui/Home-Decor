@@ -213,13 +213,16 @@ export const auth = {
       });
     }
     try {
+      const date = new Date(
+        dateOfBirth as string | number | Date
+      ).toISOString();
       if (picture) {
         const photo = picture;
         await prisma.user.update({
           where: { id: me.id },
           data: {
             name,
-            dateOfBirth,
+            dateOfBirth:date,
             profilePicture: photo,
             mobileNumber,
           },
@@ -230,7 +233,7 @@ export const auth = {
         where: { id: me.id },
         data: {
           name,
-          dateOfBirth,
+          dateOfBirth:date,
           mobileNumber,
         },
       });
