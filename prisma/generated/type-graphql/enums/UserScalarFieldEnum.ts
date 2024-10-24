@@ -13,6 +13,7 @@ export enum UserScalarFieldEnum {
   resetToken = "resetToken",
   resetTokenExpiry = "resetTokenExpiry",
   profilePicture = "profilePicture",
+  refreshToken = "refreshToken",
   createdAt = "createdAt",
   updatedAt = "updatedAt"
 }

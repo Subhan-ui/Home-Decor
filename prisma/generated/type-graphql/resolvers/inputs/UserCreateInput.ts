@@ -72,6 +72,11 @@ export class UserCreateInput {
   })
   profilePicture?: string | undefined;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  refreshToken?: string | undefined;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })

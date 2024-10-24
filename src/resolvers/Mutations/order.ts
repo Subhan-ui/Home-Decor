@@ -18,7 +18,10 @@ export class OrderResolver {
   ) {
     return await orders.addOrderItem({ productId, quantity }, ctx);
   }
-
+  @Mutation(() => String)
+  async removeOrderItem(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return await orders.removeOrderItem({ id }, ctx);
+  }
   @Mutation(() => String)
   async makeOrder(@Arg("id") id: string, @Ctx() ctx: Context) {
     return await orders.makeOrder({ id }, ctx);
@@ -30,7 +33,7 @@ export class OrderResolver {
   }
 
   @Mutation(() => String)
-  async cancelOrder(@Arg("Id") id: string, @Ctx() ctx: Context) {
+  async cancelOrder(@Arg("id") id: string, @Ctx() ctx: Context) {
     return await orders.cancelOrder({ id }, ctx);
   }
 

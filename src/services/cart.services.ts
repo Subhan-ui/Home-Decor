@@ -1,9 +1,15 @@
+import { GraphQLError } from "graphql";
 import { cartItemType, Context, idType } from "../types/types";
 
 export const carts = {
   getCartItems: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     return await prisma.cartItem.findMany({
       where: { userId: me.id },
@@ -16,8 +22,13 @@ export const carts = {
     { id, quantity }: cartItemType,
     { me, prisma }: Context
   ) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const cartItem = await prisma.cartItem.findFirst({
       where: { furnitureItemId: id, userId: me.id },
@@ -39,8 +50,13 @@ export const carts = {
     });
   },
   removeItemFromCart: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       await prisma.cartItem.delete({
@@ -55,8 +71,13 @@ export const carts = {
     }
   },
   addSingleItem: async ({ cartId: id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       const cartItem = await prisma.cartItem.findFirst({
@@ -77,8 +98,13 @@ export const carts = {
     }
   },
   removeSingleItem: async ({ cartId: id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       const cartItem = await prisma.cartItem.findFirst({

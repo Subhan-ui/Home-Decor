@@ -11,6 +11,7 @@ import {
   UserResponse,
 } from "../../types/types";
 import { Users } from "../User";
+import { GraphQLString } from "graphql";
 
 @Resolver()
 export class AuthResolver {
@@ -116,10 +117,10 @@ export class AuthResolver {
 
   @Mutation(() => String)
   async updateUser(
-    @Arg("picture") picture: string,
     @Arg("mobileNumber") mobileNumber: string,
     @Arg("name") name: string,
     @Arg("dateOfBirth") dateOfBirth: string,
+    @Arg("picture") picture: string,
     @Ctx() ctx: Context
   ) {
     return await auth.updateUser(
@@ -131,5 +132,13 @@ export class AuthResolver {
   @Mutation(() => String)
   async changeRole(@Ctx() ctx: Context) {
     return await auth.changeRole(ctx);
+  }
+
+  @Mutation(() => AuthResponse)
+  async refreshToken(
+    @Arg("refreshToken") refreshToken: string,
+    @Ctx() ctx: Context
+  ) {
+    return await auth.refreshToken({ refreshToken }, ctx);
   }
 }

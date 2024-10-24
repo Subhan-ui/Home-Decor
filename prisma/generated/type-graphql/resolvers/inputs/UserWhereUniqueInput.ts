@@ -93,6 +93,11 @@ export class UserWhereUniqueInput {
   })
   profilePicture?: StringNullableFilter | undefined;
 
+  @TypeGraphQL.Field(_type => StringNullableFilter, {
+    nullable: true
+  })
+  refreshToken?: StringNullableFilter | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFilter, {
     nullable: true
   })

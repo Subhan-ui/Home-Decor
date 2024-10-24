@@ -66,6 +66,11 @@ export class CreateManyAndReturnUser {
   })
   profilePicture!: string | null;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  refreshToken!: string | null;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: false
   })

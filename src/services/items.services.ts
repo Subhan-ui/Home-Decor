@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import { uploadingImage } from "../lib/cloudinary";
 import { Context, itemType } from "../types/types";
 
@@ -8,8 +9,13 @@ export const items = {
     });
   },
   getMyItem: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     if (me.role === "USER") {
       throw new Error("Only admins can see and add items");
@@ -24,12 +30,44 @@ export const items = {
     }
     return items;
   },
+  getCategories: async ({ prisma }: Context) => {
+    const categories = await prisma.category.findMany({
+      include: { subCategories: true },
+    });
+    return categories;
+  },
+  addSub: async (
+    { subCategory, categoryId }: { subCategory: string; categoryId: string },
+    { prisma }: Context
+  ) => {
+    const existSub = await prisma.subCategory.findFirst({
+      where: {
+        name: subCategory,
+        categoryId: categoryId,
+      },
+    });
+    if (existSub) {
+      return "Already exist";
+    }
+    await prisma.subCategory.create({
+      data: {
+        name: subCategory,
+        categoryId: categoryId,
+      },
+    });
+    return "Added Successfully";
+  },
   addItem: async (
     { name, description, price, picture, category, subCategory }: itemType,
     { me, prisma }: Context
   ) => {
-    if (!me) {
-      throw new Error("User need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     if (me.role === "USER") {
       throw new Error("Only admins can add items");
@@ -44,6 +82,7 @@ export const items = {
     });
     const existSubCategory = await prisma.subCategory.findFirst({
       where: {
+        categoryId: existCategory?.id,
         name: subCategory,
       },
     });

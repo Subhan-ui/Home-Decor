@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import { Context, idType, productIdType, reviewType } from "../types/types";
 
 export const reviews = {
@@ -14,8 +15,13 @@ export const reviews = {
     { productId, rating, comment }: reviewType,
     { prisma, me }: Context
   ) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       await prisma.review.create({
@@ -32,8 +38,13 @@ export const reviews = {
     }
   },
   deleteReview: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       await prisma.review.delete({

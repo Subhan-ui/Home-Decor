@@ -1,9 +1,15 @@
+import { GraphQLError } from "graphql";
 import { Context, idType, itemIdType } from "../types/types";
 
 export const favourites = {
   getUserFavourite: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     return await prisma.favourite.findMany({
       where: { userId: me.id },
@@ -23,8 +29,13 @@ export const favourites = {
     });
   },
   addToFavourite: async ({ itemId }: itemIdType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const existItem = await prisma.favourite.findFirst({
       where: { userId: me.id, furnitureItemId: itemId },
@@ -42,8 +53,13 @@ export const favourites = {
     return "Item added to favourites";
   },
   removeFavourite: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "YOu need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     await prisma.favourite.delete({
       where: { id: id },

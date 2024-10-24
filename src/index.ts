@@ -22,7 +22,7 @@ const loggedUser = (req: YogaInitialContext) => {
   try {
     return jwt.verify(token, process.env.APP_SECRET as string);
   } catch (error) {
-    return "Session Expired";
+    return error;
   }
 }
 

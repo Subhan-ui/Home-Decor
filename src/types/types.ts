@@ -10,6 +10,7 @@ import {
   SubCategory,
   User,
 } from "../../prisma/generated/type-graphql/models";
+import { OrderStatus } from "../../prisma/generated/type-graphql/enums/OrderStatus";
 
 export interface Upload {
   filename: string;
@@ -91,7 +92,9 @@ export type itemType = {
 @ObjectType()
 export class AuthResponse {
   @Field({ nullable: true })
-  token?: string;
+  accessToken?: string;
+  @Field({ nullable: true })
+  refreshToken?: string;
   @Field(() => User, { nullable: true })
   user?: User;
 }
@@ -100,7 +103,8 @@ export class AuthResponse {
 class FurnitureItemTypes {
   @Field(() => String, { nullable: true })
   name?: string;
-
+  @Field(() => String, { nullable: true })
+  id?: string;
   @Field(() => String, { nullable: true })
   description?: string;
   @Field(() => Number, { nullable: true })
@@ -157,12 +161,28 @@ export class ItemResponse {
 }
 
 @ObjectType()
+export class SubCategoryType {
+  @Field(() => String, { nullable: true })
+  name?: string;
+}
+
+@ObjectType()
+export class CategoryType {
+  @Field(() => String, { nullable: true })
+  name?: string;
+  @Field(() => [SubCategoryType], { nullable: true })
+  subCategories?: SubCategoryType[];
+}
+
+@ObjectType()
 export class CartItemType {
+  @Field(() => String, { nullable: true })
+  id?: String;
   @Field(() => Number, { nullable: true })
   quantity?: number;
 
-  @Field(() => FurnitureItem, { nullable: true })
-  furnitureItem?: FurnitureItem;
+  @Field(() => FurnitureItemTypes, { nullable: true })
+  furnitureItem?: FurnitureItemTypes;
 
   @Field(() => Number)
   totalPrice(): number {
@@ -176,6 +196,8 @@ export class CartItemType {
 export class OrderItemType {
   @Field(() => Number, { nullable: true })
   quantity?: number;
+  @Field(() => String, { nullable: true })
+  id?: string;
   @Field(() => Number, { nullable: true })
   price?: number;
   @Field(() => FurnitureItemTypes, { nullable: true })
@@ -188,6 +210,11 @@ export class OrderType {
   items?: OrderItemType[];
   @Field(() => Number)
   totalPrice?: number;
+  @Field(() => String)
+  id?: string;
+  @Field(() => OrderStatus, { nullable: true })
+  status?: OrderStatus;
+
   @Field(() => User, { nullable: true })
   user?: User;
 }
@@ -196,6 +223,8 @@ export class OrderType {
 export class ReviewItemType {
   @Field(() => Rating, { nullable: true })
   rating?: Rating;
+  @Field(() => String, { nullable: true })
+  id?: string;
   @Field(() => String, { nullable: true })
   comment?: string;
   @Field(() => User, { nullable: true })
@@ -206,6 +235,8 @@ export class ReviewItemType {
 
 @ObjectType()
 export class FavouriteType {
+  @Field(() => String, { nullable: true })
+  id?: String;
   @Field(() => FurnitureItemTypes, { nullable: true })
   furnitureItem?: FurnitureItemTypes;
   @Field(() => User, { nullable: true })
@@ -216,14 +247,22 @@ export class FavouriteType {
 class Orders {
   @Field(() => Number, { nullable: true })
   totalPrice?: number;
+  @Field(() => String, { nullable: true })
+  id?: string;
+  @Field(() => OrderStatus, { nullable: true })
+  status?: OrderStatus;
   @Field(() => [OrderItemType], { nullable: true })
   items?: OrderItemType[];
+  @Field(() => Date, { nullable: true })
+  updatedAt?: Date;
 }
 
 @ObjectType()
 class Cart {
   @Field(() => Number, { nullable: true })
   quantity?: number;
+  @Field(() => String, { nullable: true })
+  id?: string;
 
   @Field(() => FurnitureItemTypes, { nullable: true })
   furnitureItem?: FurnitureItemTypes;
@@ -238,6 +277,8 @@ class Cart {
 export class UserResponse {
   @Field(() => String, { nullable: true })
   name?: string;
+  @Field(() => String, { nullable: true })
+  id?: string;
 
   @Field(() => String, { nullable: true })
   email?: string;
@@ -250,6 +291,9 @@ export class UserResponse {
 
   @Field(() => String, { nullable: true })
   role?: string;
+
+  @Field(() => String, { nullable: true })
+  profilePicture?: string;
 
   @Field(() => AddressResponse, { nullable: true })
   address?: AddressResponse;

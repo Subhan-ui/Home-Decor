@@ -25,6 +25,7 @@ model User {
   resetToken       String?
   resetTokenExpiry DateTime?
   profilePicture   String?
+  refreshToken     String?
   address          Address?
   furnitureItem    FurnitureItem[]
   orders           Order[]
@@ -71,7 +72,7 @@ model FurnitureItem {
 }
 
 model Category {
-  id             String          @id @default(cuid()) 
+  id             String          @id @default(cuid())
   name           Categories
   subCategories  SubCategory[]
   furnitureItems FurnitureItem[]
@@ -145,7 +146,7 @@ model Review {
 }
 
 enum Rating {
-  WORST 
+  WORST
   BAD
   NORMAL
   GOOD

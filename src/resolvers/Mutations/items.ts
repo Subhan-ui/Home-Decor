@@ -11,7 +11,7 @@ import { FurnitureItem } from "../../../prisma/generated/type-graphql/models";
 import { Categories } from "../../../prisma/generated/type-graphql/enums/Categories";
 
 import { items } from "../../services/items.services";
-import { Context, ItemResponse } from "../../types/types";
+import { CategoryType, Context, ItemResponse, SubCategoryType } from "../../types/types";
 
 registerEnumType(Categories, {
   name: "Categories",
@@ -26,6 +26,19 @@ export class ItemsResolver {
   @Query(() => [ItemResponse])
   async getMyItems(@Ctx() ctx: Context) {
     return await items.getMyItem(ctx);
+  }
+  @Query(() => [CategoryType])
+  async getCategories(@Ctx() ctx: Context) {
+    return await items.getCategories(ctx);
+  }
+  @Query(()=>[SubCategoryType])
+  @Mutation(() => String)
+  async addSubCategories(
+    @Arg("subCategory") subCategory: string,
+    @Arg("categoryId") categoryId: string,
+    @Ctx() ctx: Context
+  ) {
+    return await items.addSub({ subCategory, categoryId }, ctx);
   }
   @Mutation(() => FurnitureItem)
   async addItem(

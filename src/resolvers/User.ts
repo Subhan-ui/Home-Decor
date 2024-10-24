@@ -1,8 +1,9 @@
+import { GraphQLError } from "graphql";
 import { User } from "../../prisma/generated/type-graphql/models";
 import { Context } from "../types/types";
 
 export const Users = {
-  getUsers: async (args: User, context: Context) => {
+  getUsers: async (_: User, context: Context) => {
     return await context.prisma.user.findMany({
       include: {
         address: true,
@@ -60,8 +61,13 @@ export const Users = {
     });
   },
   getUser: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError("User not authenticated", {
+        extensions: {
+          code: "UNAUTHENTICATED",
+          http: { status: 401 },
+        },
+      });
     }
     let user = prisma.user.findFirst({
       where: { id: me.id },

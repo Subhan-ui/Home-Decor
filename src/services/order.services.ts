@@ -1,9 +1,15 @@
+import { GraphQLError } from "graphql";
 import { Context, idType, orderItemType } from "../types/types";
 
 export const orders = {
   getOrders: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const orders = await prisma.order.findMany({
       where: { userId: me.id },
@@ -30,8 +36,13 @@ export const orders = {
     { productId, quantity }: orderItemType,
     { prisma, me }: Context
   ) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       const item = await prisma.furnitureItem.findFirst({
@@ -43,7 +54,9 @@ export const orders = {
       const user = await prisma.user.findFirst({
         where: { id: me.id },
         include: {
-          orders: true,
+          orders: {
+            where: { status: "PENDING" },
+          },
         },
       });
       const orders = user?.orders;
@@ -103,9 +116,62 @@ export const orders = {
       return "An error occured" + error;
     }
   },
+  removeOrderItem: async ({ id }: idType, { prisma, me }: Context) => {
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
+    }
+    const orderItem = await prisma.orderItem.findFirst({
+      where: { id: id },
+    });
+    if (!orderItem) {
+      return "Item not found";
+    }
+    const order = await prisma.order.findFirst({
+      where: { id: orderItem.orderId, userId: me.id },
+    });
+    if (!order) {
+      return "Order not found";
+    }
+    if (order.status !== "PENDING") {
+      return "Order already delivered or cancelled";
+    }
+    if (orderItem.quantity === 1) {
+      const deletedItem = await prisma.orderItem.delete({
+        where: { id: orderItem.id },
+      });
+      await prisma.order.update({
+        where: { id: deletedItem.orderId },
+        data: {
+          totalPrice: order.totalPrice - orderItem.price,
+        },
+      });
+      return "OrderItem deleted";
+    }
+    const updatedOrder = await prisma.orderItem.update({
+      where: { id: orderItem.id },
+      data: {
+        quantity: orderItem.quantity - 1,
+      },
+    });
+    await prisma.order.update({
+      where: { id: updatedOrder.orderId },
+      data: { totalPrice: order.totalPrice - updatedOrder.price },
+    });
+    return "OrderItem and Order updated";
+  },
   makeOrder: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to Login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const order = await prisma.order.findFirst({
       where: { id, userId: me.id },
@@ -123,8 +189,13 @@ export const orders = {
     return "Order made successfully";
   },
   delivered: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     if (me.role === "USER") {
       return "Only admins will deliver orders";
@@ -151,8 +222,13 @@ export const orders = {
     return "Order delivered successfully";
   },
   cancelOrder: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const order = await prisma.order.findFirst({
       where: { id, userId: me.id },
@@ -173,8 +249,13 @@ export const orders = {
     return "Your order is cancelled";
   },
   deleted: async ({ id }: idType, { prisma, me }: Context) => {
-    if (!me) {
-      return "You need to login";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const order = await prisma.order.findFirst({
       where: { id: id, userId: me.id },

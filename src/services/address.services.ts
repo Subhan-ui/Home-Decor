@@ -1,9 +1,15 @@
+import { GraphQLError } from "graphql";
 import { addressType, Context } from "../types/types";
 
 export const address = {
   getAdress: async ({ prisma, me }: Context) => {
-    if (!me) {
-      throw new Error("You need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
 
     const address = await prisma.address.findFirst({
@@ -22,8 +28,13 @@ export const address = {
     { street, city, state, postalCode, country }: addressType,
     { prisma, me }: Context
   ) => {
-    if (!me) {
-      throw new Error("YOu need to login");
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     const prev = await prisma.address.findFirst({
       where: { userId: me.id },
@@ -49,8 +60,13 @@ export const address = {
     { street, city, state, postalCode, country }: addressType,
     { prisma, me }: Context
   ) => {
-    if (!me) {
-      return "user not logged in";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       await prisma.address.update({
@@ -71,8 +87,13 @@ export const address = {
     }
   },
   deleteAddress: async ({ prisma, me }: Context) => {
-    if (!me) {
-      return "user not logged in";
+    if (!me?.id) {
+      throw new GraphQLError('User not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 }, 
+        },
+      });
     }
     try {
       await prisma.address.delete({
