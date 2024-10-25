@@ -152,6 +152,8 @@ export class ItemResponse {
   description?: string;
   @Field(() => String, { nullable: true })
   picture?: string;
+  @Field(() => Number, { nullable: true })
+  createdAt?: number;
   @Field(() => Category, { nullable: true })
   category?: Category;
   @Field(() => SubCategory, { nullable: true })
