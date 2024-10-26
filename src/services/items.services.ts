@@ -8,16 +8,16 @@ export const items = {
       include: { user: true, category: true, subCategory: true },
     });
   },
-  getCategoryItems: async ({id}:idType,{ prisma }: Context) => {
+  getCategoryItems: async ({ id }: idType, { prisma }: Context) => {
     const items = await prisma.furnitureItem.findMany({
-      where:{categoryId: id},
-      include:{
+      where: { categoryId: id },
+      include: {
         category: true,
-        subCategory: true
-      }
-    })
-    if(!items){
-      throw new Error("No items found")
+        subCategory: true,
+      },
+    });
+    if (!items) {
+      throw new Error("No items found");
     }
     return items;
   },
@@ -158,10 +158,47 @@ export const items = {
         ],
       },
     });
-  
+
     if (!items.length) {
       throw new Error("No items found");
     }
     return items;
+  },
+  newCollection: async ({ prisma }: Context) => {
+    return await prisma.furnitureItem.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 8,
+    });
+  },
+  popularItems: async ({ prisma }: Context) => {
+    return await prisma.furnitureItem.findMany({
+      include: {
+        category: true,
+        subCategory: true,
+      },
+      where: {
+        furnitureItem: {
+          some: {},
+        },
+      },
+      orderBy: {
+        furnitureItem: {
+          _count: "desc",
+        },
+      },
+      take: 10,
+    });
+  },
+  findSubItems: async (
+    {
+      categoryId,
+      subCategoryId,
+    }: { categoryId: string; subCategoryId: string },
+    { prisma }: Context
+  ) => {
+    return await prisma.furnitureItem.findMany({
+      where: { categoryId, subCategoryId },
+      include: { category: true, subCategory: true },
+    });
   },
 };

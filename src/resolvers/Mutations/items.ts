@@ -11,7 +11,12 @@ import { FurnitureItem } from "../../../prisma/generated/type-graphql/models";
 import { Categories } from "../../../prisma/generated/type-graphql/enums/Categories";
 
 import { items } from "../../services/items.services";
-import { CategoryType, Context, ItemResponse, SubCategoryType } from "../../types/types";
+import {
+  CategoryType,
+  Context,
+  ItemResponse,
+  SubCategoryType,
+} from "../../types/types";
 
 registerEnumType(Categories, {
   name: "Categories",
@@ -27,7 +32,7 @@ export class ItemsResolver {
   async getMyItems(@Ctx() ctx: Context) {
     return await items.getMyItem(ctx);
   }
-  @Query(()=>[ItemResponse])
+  @Query(() => [ItemResponse])
   async getCategoryItems(@Arg("id") id: string, @Ctx() ctx: Context) {
     return await items.getCategoryItems({ id }, ctx);
   }
@@ -36,12 +41,30 @@ export class ItemsResolver {
   async searchItems(@Arg("term") term: string, @Ctx() ctx: Context) {
     return await items.searchItems({ searchTerm: term }, ctx);
   }
+  @Query(() => [ItemResponse])
+  async newCollection(@Ctx() ctx: Context) {
+    return await items.newCollection(ctx);
+  }
+  @Query(() => [ItemResponse])
+  async popularItems(@Ctx() ctx: Context) {
+    return await items.popularItems(ctx);
+  }
+
+  @Query(() => [ItemResponse])
+  async getSubItems(
+    @Arg("categoryId") categoryId: string,
+    @Arg("subCategoryId") subCategoryId: string,
+    @Ctx() ctx: Context
+  ) {
+    return await items.findSubItems({ categoryId, subCategoryId }, ctx);
+  }
 
   @Query(() => [CategoryType])
   async getCategories(@Ctx() ctx: Context) {
     return await items.getCategories(ctx);
   }
-  @Query(()=>[SubCategoryType])
+
+  @Query(() => [SubCategoryType])
   @Mutation(() => String)
   async addSubCategories(
     @Arg("subCategory") subCategory: string,
@@ -65,6 +88,4 @@ export class ItemsResolver {
       ctx
     );
   }
-
-
 }

@@ -84,14 +84,14 @@ export const auth = {
       where: { email },
     });
     if (!user) {
-      return "User not found";
+      throw new Error("User not found");
     }
     if (!user.isEmailVerified) {
-      return "Email not verified";
+      throw new Error("Email not verified");
     }
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
-      return "Invalid Password";
+      throw new Error( "Invalid Password");
     }
     const accessToken = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
@@ -152,10 +152,10 @@ export const auth = {
       where: { email },
     });
     if (!user) {
-      return "Email not registered.";
+      throw new Error( "Email not registered.");
     }
     if (!user.isEmailVerified) {
-      return "Email not verified.";
+      throw new Error ("Email not verified.");
     }
     const resetToken = uuid();
     const resetTokenExpiry = addHours(new Date(), 1);
@@ -183,11 +183,11 @@ export const auth = {
     });
 
     if (!user) {
-      return "Invalid Or Expired Token";
+      throw new Error( "Invalid Or Expired Token");
     }
     const isSame = await bcrypt.compare(newPassword, user.password);
     if (isSame) {
-      return "You typed the same password again.";
+      throw new Error( "You typed the same password again.");
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await context.prisma.user.update({
