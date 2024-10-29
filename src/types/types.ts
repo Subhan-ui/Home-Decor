@@ -294,7 +294,7 @@ export class UserResponse {
   @Field(() => String, { nullable: true })
   email?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   mobileNumber?: string;
 
   @Field(() => String, { nullable: true })
