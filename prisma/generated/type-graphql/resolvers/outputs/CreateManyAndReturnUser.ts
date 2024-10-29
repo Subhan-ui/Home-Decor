@@ -22,19 +22,19 @@ export class CreateManyAndReturnUser {
   email!: string;
 
   @TypeGraphQL.Field(_type => String, {
-    nullable: false
+    nullable: true
   })
-  mobileNumber!: string;
+  mobileNumber!: string | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  dateOfBirth!: Date;
+  dateOfBirth!: Date | null;
 
   @TypeGraphQL.Field(_type => String, {
-    nullable: false
+    nullable: true
   })
-  password!: string;
+  password!: string | null;
 
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: false

@@ -8,12 +8,14 @@ import { sendVerificationEmail } from "../lib/nodemail";
 import {
   Context,
   emailType,
+  googleUser,
   loginType,
   resetPasswordType,
   SignUpArgs,
   updateUser,
 } from "../types/types";
 import { GraphQLError } from "graphql";
+import { AccountNumberResolver } from "graphql-scalars";
 
 const isTokenExpiredSoon = (expiresAt: number, bufferTimeInMinutes: number) => {
   const now = Math.floor(Date.now() / 1000);
@@ -89,9 +91,12 @@ export const auth = {
     if (!user.isEmailVerified) {
       throw new Error("Email not verified");
     }
+    if (!user.password) {
+      throw new Error("You were signed in as google or facebook");
+    }
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
-      throw new Error( "Invalid Password");
+      throw new Error("Invalid Password");
     }
     const accessToken = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
@@ -152,10 +157,10 @@ export const auth = {
       where: { email },
     });
     if (!user) {
-      throw new Error( "Email not registered.");
+      throw new Error("Email not registered.");
     }
     if (!user.isEmailVerified) {
-      throw new Error ("Email not verified.");
+      throw new Error("Email not verified.");
     }
     const resetToken = uuid();
     const resetTokenExpiry = addHours(new Date(), 1);
@@ -183,11 +188,14 @@ export const auth = {
     });
 
     if (!user) {
-      throw new Error( "Invalid Or Expired Token");
+      throw new Error("Invalid Or Expired Token");
+    }
+    if (!user.password) {
+      return new Error("You are either signed in as google or facebook");
     }
     const isSame = await bcrypt.compare(newPassword, user.password);
     if (isSame) {
-      throw new Error( "You typed the same password again.");
+      throw new Error("You typed the same password again.");
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await context.prisma.user.update({
@@ -222,7 +230,7 @@ export const auth = {
           where: { id: me.id },
           data: {
             name,
-            dateOfBirth:date,
+            dateOfBirth: date,
             profilePicture: photo,
             mobileNumber,
           },
@@ -233,7 +241,7 @@ export const auth = {
         where: { id: me.id },
         data: {
           name,
-          dateOfBirth:date,
+          dateOfBirth: date,
           mobileNumber,
         },
       });
@@ -261,5 +269,38 @@ export const auth = {
       },
     });
     return "You need to login again.";
+  },
+  async googleSignIn(
+    { email, name, picture }: googleUser,
+    { prisma }: Context
+  ) {
+    const existedUser = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (existedUser) {
+      const accessToken = createAccessToken(existedUser);
+      const refreshToken = createRefreshToken(existedUser);
+      return {
+        accessToken,
+        refreshToken,
+        user: existedUser,
+      };
+    }
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        profilePicture: picture,
+        role: "USER",
+        isEmailVerified: true,
+      },
+    });
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
+    return {
+      accessToken,
+      refreshToken,
+      user,
+    };
   },
 };

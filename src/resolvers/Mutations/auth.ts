@@ -141,4 +141,13 @@ export class AuthResolver {
   ) {
     return await auth.refreshToken({ refreshToken }, ctx);
   }
+  @Mutation(() => AuthResponse)
+  async googleSignIn(
+    @Arg("email") email: string,
+    @Arg("name") name: string,
+    @Arg("picture") picture: string,
+    @Ctx() ctx: Context
+  ) {
+    return await auth.googleSignIn({ email, name, picture }, ctx);
+  }
 }

@@ -162,6 +162,11 @@ export class ItemResponse {
   user?: User;
 }
 
+export type googleUser = {
+  email: string;
+  name: string;
+  picture: string;
+};
 @ObjectType()
 export class SubCategoryType {
   @Field(() => String, { nullable: true })

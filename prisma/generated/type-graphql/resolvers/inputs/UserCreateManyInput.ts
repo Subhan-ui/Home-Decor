@@ -22,19 +22,19 @@ export class UserCreateManyInput {
   email!: string;
 
   @TypeGraphQL.Field(_type => String, {
-    nullable: false
+    nullable: true
   })
-  mobileNumber!: string;
+  mobileNumber?: string | undefined;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  dateOfBirth!: Date;
+  dateOfBirth?: Date | undefined;
 
   @TypeGraphQL.Field(_type => String, {
-    nullable: false
+    nullable: true
   })
-  password!: string;
+  password?: string | undefined;
 
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true
