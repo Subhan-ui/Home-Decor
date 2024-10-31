@@ -15,7 +15,6 @@ import {
   updateUser,
 } from "../types/types";
 import { GraphQLError } from "graphql";
-import { AccountNumberResolver } from "graphql-scalars";
 
 const isTokenExpiredSoon = (expiresAt: number, bufferTimeInMinutes: number) => {
   const now = Math.floor(Date.now() / 1000);
@@ -88,20 +87,20 @@ export const auth = {
     if (!user) {
       throw new Error("User not found");
     }
-    if (!user.isEmailVerified) {
+    if (!user?.isEmailVerified) {
       throw new Error("Email not verified");
     }
-    if (!user.password) {
+    if (!user?.password) {
       throw new Error("You were signed in as google or facebook");
     }
-    const passwordValid = await bcrypt.compare(password, user.password);
+    const passwordValid = await bcrypt.compare(password, user?.password);
     if (!passwordValid) {
       throw new Error("Invalid Password");
     }
     const accessToken = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
     const updateUser = await context.prisma.user.update({
-      where: { id: user.id },
+      where: { id: user?.id },
       data: {
         refreshToken: refreshToken,
       },
@@ -126,13 +125,13 @@ export const auth = {
         where: { id: payload?.id },
       });
 
-      if (!user || user.refreshToken !== refreshToken) {
+      if (!user || user?.refreshToken !== refreshToken) {
         throw new GraphQLError("Invalid refresh token", {
           extensions: { code: "INVALID_TOKEN" },
         });
       }
 
-      const refreshTokenExpiresSoon = isTokenExpiredSoon(payload.exp, 20);
+      const refreshTokenExpiresSoon = isTokenExpiredSoon(payload?.exp, 20);
 
       let newRefreshToken = refreshToken;
       const accessToken = createAccessToken(user);
@@ -140,7 +139,7 @@ export const auth = {
         let refresh = createRefreshToken(user);
 
         await prisma.user.update({
-          where: { id: user.id },
+          where: { id: user?.id },
           data: {
             refreshToken: refresh,
           },
@@ -159,7 +158,7 @@ export const auth = {
     if (!user) {
       throw new Error("Email not registered.");
     }
-    if (!user.isEmailVerified) {
+    if (!user?.isEmailVerified) {
       throw new Error("Email not verified.");
     }
     const resetToken = uuid();
@@ -190,16 +189,16 @@ export const auth = {
     if (!user) {
       throw new Error("Invalid Or Expired Token");
     }
-    if (!user.password) {
+    if (!user?.password) {
       return new Error("You are either signed in as google or facebook");
     }
-    const isSame = await bcrypt.compare(newPassword, user.password);
+    const isSame = await bcrypt.compare(newPassword, user?.password);
     if (isSame) {
       throw new Error("You typed the same password again.");
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await context.prisma.user.update({
-      where: { id: user.id },
+      where: { id: user?.id },
       data: {
         password: hashedPassword,
         resetToken: null,
@@ -227,7 +226,7 @@ export const auth = {
       if (picture) {
         const photo = picture;
         await prisma.user.update({
-          where: { id: me.id },
+          where: { id: me?.id },
           data: {
             name,
             dateOfBirth: date,
@@ -238,7 +237,7 @@ export const auth = {
         return `User updated Successfully`;
       }
       await prisma.user.update({
-        where: { id: me.id },
+        where: { id: me?.id },
         data: {
           name,
           dateOfBirth: date,
@@ -259,11 +258,11 @@ export const auth = {
         },
       });
     }
-    if (me.role === "ADMIN") {
+    if (me?.role === "ADMIN") {
       return "You are already an admin";
     }
     await prisma.user.update({
-      where: { id: me.id },
+      where: { id: me?.id },
       data: {
         role: "ADMIN",
       },

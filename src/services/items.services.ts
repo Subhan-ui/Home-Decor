@@ -30,12 +30,12 @@ export const items = {
         },
       });
     }
-    if (me.role === "USER") {
+    if (me?.role === "USER") {
       throw new Error("Only admins can see and add items");
     }
     const items = await prisma.furnitureItem.findMany({
       where: {
-        userId: me.id,
+        userId: me?.id,
       },
     });
     if (!items) {
@@ -82,7 +82,7 @@ export const items = {
         },
       });
     }
-    if (me.role === "USER") {
+    if (me?.role === "USER") {
       throw new Error("Only admins can add items");
     }
     const existCategory = await prisma.category.findFirst({
@@ -110,32 +110,32 @@ export const items = {
       const newSubCategory = await prisma.subCategory.create({
         data: {
           name: subCategory,
-          categoryId: existCategory.id,
+          categoryId: existCategory?.id,
         },
         select: { id: true },
       });
       const newItem = await prisma.furnitureItem.create({
         data: {
-          userId: me.id,
+          userId: me?.id,
           name,
           description,
           price,
-          picture: photo.secure_url,
-          categoryId: existCategory.id,
-          subCategoryId: newSubCategory.id,
+          picture: photo?.secure_url,
+          categoryId: existCategory?.id,
+          subCategoryId: newSubCategory?.id,
         },
       });
       return newItem;
     }
     const item = await prisma.furnitureItem.create({
       data: {
-        userId: me.id,
+        userId: me?.id,
         name,
         description,
         price,
-        picture: photo.secure_url,
-        categoryId: existCategory.id,
-        subCategoryId: existSubCategory.id,
+        picture: photo?.secure_url,
+        categoryId: existCategory?.id,
+        subCategoryId: existSubCategory?.id,
       },
     });
     return item;
@@ -159,7 +159,7 @@ export const items = {
       },
     });
 
-    if (!items.length) {
+    if (!items?.length) {
       throw new Error("No items found");
     }
     return items;

@@ -12,7 +12,7 @@ export const favourites = {
       });
     }
     return await prisma.favourite.findMany({
-      where: { userId: me.id },
+      where: { userId: me?.id },
       include: {
         furnitureItem: true,
         user: true,
@@ -38,7 +38,7 @@ export const favourites = {
       });
     }
     const existItem = await prisma.favourite.findFirst({
-      where: { userId: me.id, furnitureItemId: itemId },
+      where: { userId: me?.id, furnitureItemId: itemId },
     });
     if (existItem) {
       return "Item is already in your favourites";
@@ -46,7 +46,7 @@ export const favourites = {
 
     await prisma.favourite.create({
       data: {
-        userId: me.id,
+        userId: me?.id,
         furnitureItemId: itemId,
       },
     });

@@ -13,7 +13,7 @@ export const address = {
     }
 
     const address = await prisma.address.findFirst({
-      where: { userId: me.id },
+      where: { userId: me?.id },
       include: {
         user: true,
       },
@@ -37,7 +37,7 @@ export const address = {
       });
     }
     const prev = await prisma.address.findFirst({
-      where: { userId: me.id },
+      where: { userId: me?.id },
     });
     if (prev) {
       throw new Error(
@@ -46,7 +46,7 @@ export const address = {
     }
     const address = await prisma.address.create({
       data: {
-        userId: me.id,
+        userId: me?.id,
         street,
         city,
         state,
@@ -71,7 +71,7 @@ export const address = {
     try {
       await prisma.address.update({
         where: {
-          userId: me.id,
+          userId: me?.id,
         },
         data: {
           street,
@@ -98,7 +98,7 @@ export const address = {
     try {
       await prisma.address.delete({
         where: {
-          userId: me.id,
+          userId: me?.id,
         },
       });
       return "Address Deleted Successfully";

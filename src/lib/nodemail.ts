@@ -23,7 +23,7 @@ export async function sendVerificationEmail(
     if (error) {
       return error.message
     } else {
-      return 'Email Sent '+ info.response
+      return 'Email Sent '+ info?.response
     }
   });
 }

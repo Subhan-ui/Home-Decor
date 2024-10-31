@@ -2,8 +2,8 @@ import { IncomingMessage, ServerResponse } from "node:http";
 
 export const middleware = [
   (req: IncomingMessage, res: ServerResponse, next: () => void) => {
-    if (req.url === "/") {
-      res.end(
+    if (req?.url === "/") {
+      res?.end(
         `<!DOCTYPE html>
           <html>
           <head>

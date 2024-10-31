@@ -12,7 +12,7 @@ export const carts = {
       });
     }
     return await prisma.cartItem.findMany({
-      where: { userId: me.id },
+      where: { userId: me?.id },
       include: {
         furnitureItem: true,
       },
@@ -31,21 +31,21 @@ export const carts = {
       });
     }
     const cartItem = await prisma.cartItem.findFirst({
-      where: { furnitureItemId: id, userId: me.id },
+      where: { furnitureItemId: id, userId: me?.id },
     });
     if (!cartItem) {
       return await prisma.cartItem.create({
         data: {
           quantity: quantity,
           furnitureItemId: id,
-          userId: me.id,
+          userId: me?.id,
         },
       });
     }
     return await prisma.cartItem.update({
-      where: { id: cartItem.id },
+      where: { id: cartItem?.id },
       data: {
-        quantity: quantity + cartItem.quantity,
+        quantity: quantity + cartItem?.quantity,
       },
     });
   },
@@ -81,18 +81,18 @@ export const carts = {
     }
     try {
       const cartItem = await prisma.cartItem.findFirst({
-        where: { id: id, userId: me.id },
+        where: { id: id, userId: me?.id },
       });
       if (!cartItem) {
         return "Item not found";
       }
       const updatedCart = await prisma.cartItem.update({
-        where: { id: cartItem.id },
+        where: { id: cartItem?.id },
         data: {
-          quantity: cartItem.quantity + 1,
+          quantity: cartItem?.quantity + 1,
         },
       });
-      return `${updatedCart.quantity} items is added to the cart`;
+      return `${updatedCart?.quantity} items is added to the cart`;
     } catch (error) {
       return "An error occured";
     }
@@ -108,24 +108,24 @@ export const carts = {
     }
     try {
       const cartItem = await prisma.cartItem.findFirst({
-        where: { id: id, userId: me.id },
+        where: { id: id, userId: me?.id },
       });
       if (!cartItem) {
         return "Item not found";
       }
-      if (cartItem.quantity === 1) {
+      if (cartItem?.quantity === 1) {
         await prisma.cartItem.delete({
-          where: { id: cartItem.id },
+          where: { id: cartItem?.id },
         });
         return "Item is remove from the cart";
       }
       const updatedCart = await prisma.cartItem.update({
-        where: { id: cartItem.id },
+        where: { id: cartItem?.id },
         data: {
-          quantity: cartItem.quantity - 1,
+          quantity: cartItem?.quantity - 1,
         },
       });
-      return `${updatedCart.quantity} items is left in the cart`;
+      return `${updatedCart?.quantity} items is left in the cart`;
     } catch (error) {
       return "An error occured";
     }

@@ -26,7 +26,7 @@ export const reviews = {
     try {
       await prisma.review.create({
         data: {
-          userId: me.id,
+          userId: me?.id,
           furnitureItemId: productId,
           rating: rating,
           comment: comment,
@@ -50,7 +50,7 @@ export const reviews = {
       await prisma.review.delete({
         where: {
           id: id,
-          userId: me.id,
+          userId: me?.id,
         },
       });
       return "Review deleted successfully";

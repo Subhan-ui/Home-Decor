@@ -13,7 +13,7 @@ import { maxTokensPlugin } from '@escape.tech/graphql-armor-max-tokens'
 
 const prisma = new PrismaClient();
 const loggedUser = (req: YogaInitialContext) => {
-  const token = req.request.headers.get("authorization");
+  const token = req?.request?.headers?.get("authorization");
 
   if (!token) {
     return null;
@@ -49,7 +49,7 @@ async function startServer() {
 
   const server = createServer(yoga);
   server.on("request", (req: IncomingMessage, res: ServerResponse) => {
-    middleware.forEach((fn) => fn(req, res, () => {}));
+    middleware?.forEach((fn) => fn(req, res, () => {}));
   });
   const PORT = process.env.PORT || 4000;
 

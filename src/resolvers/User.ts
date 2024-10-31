@@ -70,7 +70,7 @@ export const Users = {
       });
     }
     let user = prisma.user.findFirst({
-      where: { id: me.id },
+      where: { id: me?.id },
       include: {
         address: true,
         furnitureItem: {

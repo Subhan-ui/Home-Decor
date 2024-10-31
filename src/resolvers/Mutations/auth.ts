@@ -51,7 +51,7 @@ export class AuthResolver {
     const user = await ctx.prisma.user.findUnique({
       where: { email: email },
     });
-    if (!user || user.verificationCode !== verificationCode) {
+    if (!user || user?.verificationCode !== verificationCode) {
       throw new Error("Invalid Email or Verification Code");
     }
     await ctx.prisma.user.update({
@@ -106,12 +106,12 @@ export class AuthResolver {
       await prisma.user.update({
         where: { email: email },
         data: {
-          profilePicture: photo.secure_url,
+          profilePicture: photo?.secure_url,
         },
       });
-      return `${photo.public_id}.${photo.format}`;
+      return `${photo?.public_id}.${photo?.format}`;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error(error?.message);
     }
   }
 
