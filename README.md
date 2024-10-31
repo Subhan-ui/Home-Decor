@@ -1,5 +1,4 @@
 
-
 # Table of Contents
 - [Overview](#overview)
 - [Features](#features)
@@ -22,29 +21,49 @@
     - [Updating User](#updating-user)
       - [Updating Profile Picture](#updating-profile-picture)
       - [Updating User Data](#updating-user-data)
+    - [Getting User Data](#getting-user-data)
+      - [Logged In User data](#logged-in-user-data)
+      - [Every User Data](#every-user-data)
+    - [Deleting User](#deleting-user)
+    - [Getting Refresh Token](#getting-refresh-token)
   - [Address Management](#address-management)
     - [Adding Address](#adding-address-with-the-user)
     - [Update Address](#update-address)
     - [Delete Address](#delete-address)
+    - [Getting Address](#getting-address)
   - [Furniture Item Management](#furniture-item)
     - [Add Furniture Item](#add-furniture-item)
+    - [Getting All Furniture Items](#getting-all-furniture-items)
+    - [Get My Furniture Items](#get-my-furniture-items)
+    - [get Items according to Categories](#get-items-according-to-categories)
+    - [Searching](#searching)
+    - [Getting New Collection](#getting-new-collection)
+    - [Getting popular Items](#getting-popular-items)
+    - [Getting items according to categories and subCategories](#getting-items-according-to-categories-and-subcategories)
+    - [Getting all categories and subCategories](#getting-all-categories-and-subcategories)
   - [Cart Management](#cart-management)
     - [Adding Item to Cart](#adding-item-to-cart)
     - [Adding Single Item to Cart](#adding-single-item-to-cart)
     - [Removing Single Item from Cart](#removing-single-item-from-cart)
     - [Remove Cart Item](#remove-cart-item)
+    - [Getting Cart Items](#getting-cart-items)
   - [Favourite Management](#favourite-management)
     - [Adding Item to Favourites](#adding-item-to-favourites)
     - [Removing Item from Favourites](#removing-item-from-favourites)
+    - [Getting the favourite items](#getting-the-favourite-items)
+      - [By User](#by-user)
+      - [By Items](#by-items)
   - [Order Management](#order-management)
     - [Adding Order Item](#adding-order-item)
     - [Confirming Order](#confirming-an-order)
     - [Delivered](#delivered)
     - [Cancelling Order](#cancelling-an-order)
     - [Deleting Order](#deleting-an-order)
+    - [Getting the order details](#getting-the-order-details)
   - [Review Management](#review-management)
     - [Adding Review](#adding-review)
     - [Deleting Review](#deleting-a-review)
+    - [Get the items reviews](#get-the-items-reviews)
 
 # Home Decor Backend App Server
 
@@ -153,6 +172,7 @@ To run this project, you will need to add the following environment variables to
 Queries and Mutations parameter and outputs types all are available in graphql docs section.
 
 
+
 ## User Management
 
 ### Register
@@ -198,7 +218,8 @@ mutation {
 ```
 mutation {
   login(email:"xoxivis413@abevw.com", password:"password"){
-  token
+  accessToken
+  refreshToken
   user{
     name
     }
@@ -214,7 +235,7 @@ mutation {
 token that we received from when we login we need to use that token to put it in the header as follows.
  ```
  {
-    "authorization":"Your token here"
+    "authorization":"Your accessToken here"
  }
 ```
 
@@ -281,6 +302,254 @@ The above function can only works if the user is logged in.
 | mobileNumber | string | Required: Mobile Number |
 
 
+### Getting User Data
+
+There are two ways by which we can get user data 
+- Getting the data of the user who is logged in.
+- Getting the data of every user.
+
+#### Logged In User data
+```
+{
+    getUser {
+      name
+      email
+      mobileNumber
+      profilePicture
+      id
+      dateOfBirth
+      address {
+        street
+        city
+        state
+        postalCode
+        country
+      }
+      orders {
+        totalPrice
+        id
+        status
+        updatedAt
+        items {
+          id
+          quantity
+          price
+          furnitureItem {
+            name
+            id
+            description
+            price
+            picture
+            category {
+              name
+              id
+            }
+            subCategory {
+              name
+              id
+            }
+          }
+        }
+      }
+      cartItems {
+        id
+        quantity
+        totalPrice
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+      favourites {
+        id
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+      reviews {
+        id
+        rating
+        comment
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+    }
+  }
+```
+
+this data can only available when the user is logged in 
+
+#### Every User Data
+```
+{
+    getUsers {
+      name
+      email
+      mobileNumber
+      profilePicture
+      id
+      dateOfBirth
+      address {
+        street
+        city
+        state
+        postalCode
+        country
+      }
+      orders {
+        totalPrice
+        id
+        status
+        updatedAt
+        items {
+          id
+          quantity
+          price
+          furnitureItem {
+            name
+            id
+            description
+            price
+            picture
+            category {
+              name
+              id
+            }
+            subCategory {
+              name
+              id
+            }
+          }
+        }
+      }
+      cartItems {
+        id
+        quantity
+        totalPrice
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+      favourites {
+        id
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+      reviews {
+        id
+        rating
+        comment
+        furnitureItem {
+          name
+          id
+          description
+          price
+          picture
+          category {
+            name
+            id
+          }
+          subCategory {
+            name
+            id
+          }
+        }
+      }
+    }
+  }
+```
+
+### Deleting User
+
+```
+mutation{
+  DeleteUser(email:"xoxivis413@abevw.com")
+}
+```
+| Parameter | Type | Description |
+|---|---|---|
+| email | string | Required: Unique email address of the user |
+
+### Getting Refresh Token
+This query is usefull when the accessToken is expired then usually the refreshToken is not expired so we just give the refreshToken to this query and it will automatically generate the new accessToken and only change the refreshToken when it is going to expire otherwise return the previous one. Following query can be used to achieve this functionality.
+
+```
+mutation {
+  refreshToken(refreshToken: "Previous Refresh Token here") {
+    accessToken
+    refreshToken
+    user {
+      name
+      email
+    }
+  }
+}
+```
+| Parameter | Type | Description |
+|---|---|---|
+| refreshToken | string | Required: Refresh token that was received while logging in or while refreshing the accessToken |
+
 ## Address Management
 
 ### Adding Address with the user.
@@ -331,6 +600,24 @@ To delete the address the user need to be logged in.
 | postalCode | string | Required: postal code of teh area. | 
 | country | string | Required: Country where user lived in. |
 
+### Getting Address
+In order to get the address user must login first. Following is how we can get the user's Address
+
+```
+{
+  getAddress {
+    street
+    city
+    state
+    postalCode
+    country
+    user {
+      name
+      email
+    }
+  }
+}
+```
 
 ## Furniture Item
 
@@ -374,6 +661,199 @@ enum Categories {
 | picture | string | Required: Picture of the item being added. |
 | category | Categories | Required: Category of the item being added. |
 | subCategory | string | Required: SubCategory of the item being added. |
+
+### Getting All Furniture items
+In order for this query to run user don't have to login. 
+Following is how we can get all the furniture items
+
+```
+{
+  getItems {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+### Get My Furniture Items
+This query is for getting the items that are added by the user that are admin and are logged in right now. 
+
+```
+{
+  getMyItems {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+### Get Items according to Categories
+This query is for getting the items according to there categories. Forexample I want to get all the items available related to a specific category like Kitchen or Office then i just use this query.
+
+```
+{
+  getCategoryItems(id: "1") {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| id | string | Required: Unique id of categories available. |
+
+### Searching 
+This query is really helpful in searching functionality user just have to type a term that he want to search for and the all the items related to that search term will appear as a result of this query.
+
+```
+{
+  searchItems(term: "text here") {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| term | string | Required: Term that a user want to search for in all the furniture items. |
+
+### Getting New Collection
+This query is helpful if we want to get the items are recently added. Following is the way we can get the new collection items.
+
+```
+{
+  newCollection {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+### Getting popular Items
+This query is helpful if we want to get the items who are popular means are ordered by most users.
+
+```
+{
+  popularItems {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+### Getting items according to categories and subCategories
+
+This query is usefull when a user wants to get the items based on their categories and subCategories. Following is how we can get the items based on their categories and subCategories
+
+```
+{
+  getSubItems(subCategoryId: "6", categoryId: "1") {
+    id
+    name
+    price
+    description
+    picture
+    category {
+      name
+      id
+    }
+    subCategory {
+      id
+      name
+    }
+  }
+}
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| categoryId | string | Required: id of the category. |
+| subCategoryId | string | Required: id of the subCategory. |
+
+### Getting all categories and subCategories
+For above query to work we need to some hwo show all the categories and subCategories available at the moment. So for this purpose we use can use this query here.
+
+```
+{
+    getCategories{
+        id
+        name
+        subCategories{
+            id
+            name
+        }
+    }
+}
+```
+
 
 
 ## Cart Management
@@ -419,6 +899,35 @@ mutation {
 ```
 And this is how we can completely remove an item from the cart no matter what its quantities are at the point.
 
+### Getting Cart Items
+This query is used to get the items that are put by the users in cart. In order to get these items that are available in cart we can use the following query.
+
+```
+{
+  getCartItems {
+    id
+    quantity
+    totalPrice
+    furnitureItem {
+      id
+      name
+      description
+      price
+      picture
+      category {
+        id
+        name
+      }
+      subCategory {
+        id
+        name
+      }
+    }
+  }
+}
+```
+
+
 ## Favourite Management
 
 User need to be login in order to perform the actions related to favourite. User can add an item to favourite and can remove from its favourite.
@@ -447,6 +956,52 @@ mutation {
 |---|---|---|
 | id | string | Required: The id of the favourite item that need to be removed. |
 
+### Getting the favourite items
+There are actually two ways by which we can get favourite items. One is by user means the items that are added to favourite by the user who's login. Second is by items means the items is favourite by how many and by which user.
+
+#### By User
+```
+{
+  getUserFavourites {
+    id
+    furnitureItem {
+      id
+      name
+      description
+      price
+      picture
+      category {
+        id
+        name
+      }
+      subCategory {
+        id
+        name
+      }
+    }
+  }
+}
+```
+
+#### By Items
+```
+{
+  getItemFavourites(itemId: "id of the item here") {
+    id
+    furnitureItem {
+      name
+      description
+    }
+    user {
+      id
+      name
+      email
+      mobileNumber
+      profilePicture
+    }
+  }
+}
+```
 
 ## Order Management
 
@@ -526,6 +1081,40 @@ mutation{
 | id| string| Required: The id of the order a user need to delete.|
 
 
+### Getting the order details
+User must login in order to get the details of teh order and user can only get the details of the order that is his own.
+
+```
+{
+  getOrders {
+    id
+    totalPrice
+    status
+    items {
+      id
+      quantity
+      price
+      furnitureItem {
+        id
+        name
+        description
+        price
+        picture
+        category {
+          id
+          name
+        }
+        subCategory {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+
 ## Review Management
 
 An authenticated user can add or delete a review. User can only delete a review which is created by himself. A review include rating which is as follows 
@@ -572,6 +1161,28 @@ mutation {
 | Parameter | Type | Description |
 |---|---|---|
 | id | string | Required: The unique identifier of the review that you want to delete. |
+
+
+### Get the items reviews
+```
+{
+  getReviews(productId: "") {
+    id
+    rating
+    comment
+    user {
+      id
+      name
+      email
+      profilePicture
+    }
+  }
+}
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| productId | string | Required: The unique identifier of the item that you want to see the reviews of. |
 
 
 ## Contributing
